@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,9 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace capstone
 {
+    public class DbConfiguration
+    {
+        public string ConnectionString { get; set; }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -21,6 +28,23 @@ namespace capstone
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.IncludeErrorDetails = true;
+                   options.Authority = "https://securetoken.google.com/porterandmoon";
+                   options.TokenValidationParameters = new TokenValidationParameters
+                   {
+                       ValidateIssuer = true,
+                       ValidIssuer = "https://securetoken.google.com/porterandmoon",
+                       ValidateAudience = true,
+                       ValidAudience = "porterandmoon",
+                       ValidateLifetime = true
+                   };
+               }
+               );
+
+            services.Configure<DbConfiguration>(Configuration);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
