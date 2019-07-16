@@ -1,0 +1,14 @@
+import React from 'react';
+import './base.scss';
+
+class base extends React.Component {
+  render() {
+    return(
+      <div className='base'>
+
+      </div>
+    );
+  }
+}
+
+export default base;

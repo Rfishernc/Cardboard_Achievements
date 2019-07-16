@@ -33,10 +33,8 @@ const createUser = (email, password) => new Promise((resolve, reject) => {
     });
 });
 
-const createUserInDB = (FirstName, LastName, UserName, Uid) => {
+const createUserInDB = (UserName, Uid) => {
   const newUser = {
-    FirstName,
-    LastName,
     UserName,
     Uid
   }
