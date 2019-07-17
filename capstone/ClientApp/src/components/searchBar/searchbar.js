@@ -13,7 +13,7 @@ class searchBar extends React.Component {
     return(
       <div className='searchBar'>
         <InputGroup>
-            <Input className="input" type="text" value={this.state.value} placeholder="Search..." />
+            <Input className="input" type="text" placeholder="Search..." />
             <Button className="btn"><NavLink to="/search-results"><i className="fas fa-search"></i></NavLink></Button>
         </InputGroup>
       </div>

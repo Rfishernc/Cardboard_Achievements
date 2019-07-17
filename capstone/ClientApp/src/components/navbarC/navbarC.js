@@ -78,8 +78,8 @@ class navbarC extends React.Component {
 
   gameMenu = () => {
     return <div id='gameMenu' onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut}>
-              <NavLink tag={RRNavLink} to='/mygames' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
-              <NavLink tag={RRNavLink} to='/allgames' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
+              <NavLink tag={RRNavLink} to='/games+my' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
+              <NavLink tag={RRNavLink} to='/games+all' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
             </div>;
   }
 
@@ -98,13 +98,13 @@ class navbarC extends React.Component {
                   <i className="fas fa-home"></i> Home
                 </NavLink>
                 <NavLink tag={RRNavLink} to='/myachievements' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
-                  <i class="fas fa-trophy"></i> My Achievements
+                  <i className="fas fa-trophy"></i> My Achievements
                 </NavLink>
                 <NavLink tag={RRNavLink} to='/gamers' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
-                  <i class="fas fa-user-friends"></i> Gamers
+                  <i className="fas fa-user-friends"></i> Gamers
                 </NavLink>
                 <div onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut} className={this.state.gameMenu ? 'nav-link hovered' : 'nav-link'} id='gameLink'>
-                  <i class="fas fa-dice"></i> View Games
+                  <i className="fas fa-dice"></i> View Games
                   <div id='dropdownMenuDiv'>
                     {this.state.gameMenu ? this.gameMenu() : null}
                   </div>

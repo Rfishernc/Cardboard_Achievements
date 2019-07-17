@@ -88,7 +88,7 @@ class login extends React.Component {
       <div className='login'>
         <p className='nav-link' onClick={this.toggle}
                   onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}> 
-                  <i class="fas fa-sign-in-alt"></i> Login
+                  <i className="fas fa-sign-in-alt"></i> Login
         </p> 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader className='loginM' toggle={this.toggle}>

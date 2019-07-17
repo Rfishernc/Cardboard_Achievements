@@ -1,6 +1,9 @@
 import React from 'react';
 import NavbarC from '../navbarC/navbarC';
 import Home from '../home/home';
+import Gamers from '../gamers/gamers';
+import MyAchievements from '../myAchievements/myAchievements';
+import GamesList from '../gamesList/gamesList';
 import connection from '../../data/connection';
 import firebase from 'firebase/app';
 import {
@@ -83,7 +86,11 @@ connection();
               <div className="switch-comp">
             <Switch>
               <Route path='/home' exact component={Home} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
-              <Route path='' exact component={Home} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/' exact component={Home} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/games+*' component={GamesList} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/myachievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
             </Switch>
               </div>
           </React.Fragment>
