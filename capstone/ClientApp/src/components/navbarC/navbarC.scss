@@ -1,0 +1,55 @@
+.navLinks {
+  display: flex;
+}
+
+.nav-link {
+  height: 60px;
+  padding-top: 18px;
+  margin-bottom: 0;
+  font-size: 0.9em;
+}
+
+.navbar {
+  width: 100%;
+  padding-bottom: 0;
+  padding-top: 0;
+  padding-right: 0;
+  padding-left: 0;
+  height: 60px;
+}
+
+.navTitle {
+  color: lightgray !important;
+  margin-left: 10px;
+}
+
+.hovered {
+  background-color: skyblue !important;
+  color: black !important;
+}
+
+.active {
+  background-color: darkgray !important;
+  color: white !important;
+}
+
+#gameLink {
+  width: 120px;
+  z-index: 150;
+}
+
+.gameMenuItem {
+  height: 45px;
+  width: 120px;
+}
+
+#dropdownMenuDiv {
+  display: flex;
+  margin-top: 18px;
+  margin-left: -8px;
+}
+
+#gameMenu {
+  background-color: #343a40;
+  color: white;
+}
