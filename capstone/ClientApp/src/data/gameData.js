@@ -13,6 +13,17 @@ const getAllGames = () => new Promise((resolve, reject) => {
     });
 });
 
+const getGameDetails = (gameId) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/game/${gameId}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
 export default {
   getAllGames,
+  getGameDetails,
 }

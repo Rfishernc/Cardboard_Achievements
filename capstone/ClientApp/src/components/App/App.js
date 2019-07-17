@@ -4,6 +4,7 @@ import Home from '../home/home';
 import Gamers from '../gamers/gamers';
 import MyAchievements from '../myAchievements/myAchievements';
 import GamesList from '../gamesList/gamesList';
+import GameDetail from '../gameDetail/gameDetail';
 import connection from '../../data/connection';
 import firebase from 'firebase/app';
 import {
@@ -91,6 +92,7 @@ connection();
               <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/games+*' component={GamesList} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/myachievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/game' component={GameDetail} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
             </Switch>
               </div>
           </React.Fragment>

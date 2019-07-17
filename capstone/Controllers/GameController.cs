@@ -25,5 +25,12 @@ namespace capstone.Controllers
             var games = _connection.GetAllGamesWithAchievements();
             return Accepted(games);
         }
+
+        [HttpGet("{gameId}")]
+        public ActionResult GetGameDetails(int gameId)
+        {
+            var gameAchievements = _connection.GetGameDetails(gameId);
+            return Accepted(gameAchievements);
+        }
     }
 }

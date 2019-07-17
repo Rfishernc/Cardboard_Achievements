@@ -22,9 +22,8 @@ namespace capstone.Connections
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var queryString = @"Select Game.Id as GameId, Achievement.Id as AchievementId, Game.Name as GameName, Achievement.Name as AchievementName,
-                                        Game.Link, Achievement.Difficulty, Achievement.DateAdded, Achievement.Description,
-                                        Game.Image as GameImage, Achievement.Image as AchievementImage
+                var queryString = @"Select Game.Id as GameId, Achievement.Id as AchievementId, Game.Name as GameName,
+                                        Game.Link, Achievement.Difficulty, Game.Image as GameImage
                                     From Game
                                     Join Achievement ON Achievement.GameId = Game.Id
                                     Where Achievement.IsApproved = 1";
@@ -34,6 +33,22 @@ namespace capstone.Connections
                 return gamesWithAchieves;
             }
             throw new Exception("Failed to return games list.");
+        }
+
+        public IEnumerable<GameAchievement> GetGameDetails(int gameId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Game.Id as GameId, Achievement.Id as AchievementId, Game.Name as GameName,
+                                        Game.Link, Achievement.Difficulty, Game.Image as GameImage, Achievement.Image as AchievementImage, 
+                                        Achievement.Difficulty, Achievement.Description, Achievement.DateAdded, Achievement.Name as AchievementName
+                                    From Game
+                                    Join Achievement ON Achievement.GameId = Game.Id
+                                    Where Game.Id = @GameId AND Achievement.IsApproved = 1";
+                var gameAchievements = connection.Query<GameAchievement>(queryString, new { gameId });
+                return gameAchievements;
+            }
+            throw new Exception("Failed to get game details.");
         }
     }
 }
