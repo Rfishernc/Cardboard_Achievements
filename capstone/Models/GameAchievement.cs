@@ -17,5 +17,7 @@ namespace capstone.Models
         public DateTime DateAdded { get; set; }
         public string GameImage { get; set; }
         public string AchievementImage { get; set; }
+        public DateTime DateSubmitted { get; set; }
+        public bool Completed { get; set; }
     }
 }

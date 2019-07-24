@@ -5,10 +5,11 @@ import Gamers from '../gamers/gamers';
 import MyAchievements from '../myAchievements/myAchievements';
 import GamesList from '../gamesList/gamesList';
 import GameDetail from '../gameDetail/gameDetail';
+import ModeratorPortal from '../moderatorPortal/moderatorPortal';
 import connection from '../../data/connection';
 import firebase from 'firebase/app';
 import {
-  BrowserRouter, Route, Redirect, Switch,
+  BrowserRouter, Route, Switch,
 } from 'react-router-dom';
 import profileCalls from '../../data/profileCalls';
 import './App.scss';
@@ -82,7 +83,7 @@ connection();
 
     return (
         <BrowserRouter>
-          <NavbarC moderator={false}/>
+          <NavbarC moderator={true}/>
           <React.Fragment>
               <div className="switch-comp">
             <Switch>
@@ -91,8 +92,9 @@ connection();
               <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/games+*' component={GamesList} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
-              <Route path='/myachievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/achievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/game' component={GameDetail} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/mods' component={ModeratorPortal} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
             </Switch>
               </div>
           </React.Fragment>

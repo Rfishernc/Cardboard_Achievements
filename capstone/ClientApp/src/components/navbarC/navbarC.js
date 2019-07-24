@@ -12,11 +12,24 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import SearchBar from '../searchBar/searchbar';
 import Login from '../login/login';
+import Notification from './notification/notification';
+import userData from '../../data/userData';
 import './navbarC.scss';
 
 class navbarC extends React.Component {
   state = {
-    gameMenu: false
+    gameMenu: false,
+    currentUser: 2,
+    notificationsInfo: null
+  }
+
+  componentDidMount() {
+    if (this.state.currentUser) {
+      userData.getNotifications(this.state.currentUser)
+        .then((notificationsInfo) => {
+          this.setState({ notificationsInfo });
+        })
+    }
   }
 
   hovered = (event) => {
@@ -78,9 +91,20 @@ class navbarC extends React.Component {
 
   gameMenu = () => {
     return <div id='gameMenu' onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut}>
-              <NavLink tag={RRNavLink} to='/games+my' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
+              <NavLink tag={RRNavLink} to={`/games+${this.state.currentUser}`} onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
               <NavLink tag={RRNavLink} to='/games+all' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
             </div>;
+  }
+
+  showNotifications = () => {
+    const renderArray = [];
+    this.state.notificationsInfo.forEach((notification) => {
+      renderArray.push(<Notification achievementName={notification.achievementName} gameName={notification.gameName}
+        description={notification.description} dateSubmitted={notification.dateSubmitted} declineMsg={notification.declineMsg}
+        link={notification.link} isApproved={notification.isApproved} image={notification.image}
+        key={`notification${notification.id}`} id={`notification${notification.id}`}/>);
+    });
+    return renderArray;
   }
 
   render() {
@@ -97,9 +121,11 @@ class navbarC extends React.Component {
                 <NavLink tag={RRNavLink} to='/home' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-home"></i> Home
                 </NavLink>
-                <NavLink tag={RRNavLink} to='/myachievements' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
-                  <i className="fas fa-trophy"></i> My Achievements
+                <NavLink tag={RRNavLink} to={`/achievements?Id=${this.state.currentUser}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
+                  <i className="fas fa-trophy"></i> My Achievements 
                 </NavLink>
+                {this.state.notificationsInfo ? <button className='notificationsButton' onClick={this.showNotifications}>
+                  <span class="badge badge-light">{this.state.notificationsInfo.length}</span></button> : null}
                 <NavLink tag={RRNavLink} to='/gamers' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-user-friends"></i> Gamers
                 </NavLink>

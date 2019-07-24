@@ -18,15 +18,19 @@ namespace capstone.Connections
             _connectionString = dbConfig.Value.ConnectionString;
         }
 
-        public Game DoAThing(int userId)
+        public IEnumerable<BlogPost> GetBlogPosts()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var queryString = @" ";
-                var thing = connection.QueryFirstOrDefault<Game>(queryString);
-                return thing;
+                var sixMonthsAgo = DateTime.Now.AddMonths(-6);
+                var queryString = @"Select Id, BlogContent, BlogTitle, DatePosted, Author
+                                    From BlogPost
+                                    Where DatePosted > @sixMonthsAgo
+                                    Order by DatePosted Desc";
+                var blogPosts = connection.Query<BlogPost>(queryString, new { sixMonthsAgo });
+                return blogPosts;
             }
-            throw new Exception("It didn't work.");
+            throw new Exception("Could not get blog posts");
         }
     }
 }
