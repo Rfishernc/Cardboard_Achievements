@@ -70,6 +70,14 @@ namespace capstone.Controllers
             return Accepted(achievements);
         }
 
+        [HttpGet("proposed/{gameId}/{userId}")]
+        public ActionResult GetProposedAchievementsForGame(int gameId, int userId)
+        {
+            var request = new ProposedAchievementsForGameRequest() { UserId = userId, GameId = gameId };
+            var achievements = _connection.GetProposedAchievementsForGame(request);
+            return Accepted(achievements);
+        }
+
         [HttpPost]
         public ActionResult SubmitAchievement(NewUserAchievementRequest newAchievement)
         {

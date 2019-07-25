@@ -96,7 +96,14 @@ namespace capstone.Connections
                                     Order by Popularity Desc";
                 var popularityRankings = connection.Query<GamePopularity>(queryString);
                 var popularity = popularityRankings.Where(game => game.GameId == gameId).Select(listing => listing.Ranking).ToList();
-                return popularity[0];
+                if (popularity.Count > 0)
+                {
+                    return popularity[0];
+                }
+                else
+                {
+                    return 0;
+                }
             }
             throw new Exception("Failed to get player info.");
         }

@@ -2,6 +2,7 @@ import React from 'react';
 import gameData from '../../data/gameData';
 import achievementData from '../../data/achievementData';
 import Achievement from '../achievement/achievement';
+import { Button } from 'reactstrap';
 import './gameDetail.scss';
 
 class gameDetail extends React.Component {
@@ -40,6 +41,10 @@ class gameDetail extends React.Component {
     return points;
   }
 
+  viewProposed = () => {
+    this.props.history.push(`/voting/game?Id=${this.state.gameInfo[0].gameId}`);
+  }
+
   detailsBuilder = () => {
     if (this.state.gameInfo !== null) {
       return <div>
@@ -56,7 +61,11 @@ class gameDetail extends React.Component {
             <p className='gameInfoUnit'>Popularity Ranking: #{this.state.popularity}</p>
           </div>
         </div>
-        <a href={this.state.gameInfo[0].link} className='gameLink'>BoardgameGeek Page</a>
+        <div className='detailsLinksContainer'>
+          <a href={this.state.gameInfo[0].link} className='gameLink'>BoardgameGeek Page</a>
+          <Button className='btn btn-dark btn-sm' onClick={this.viewProposed}>
+            View Proposed Achievements For {this.state.gameInfo[0].gameName}</Button>
+        </div>
       </div>
     }
   }

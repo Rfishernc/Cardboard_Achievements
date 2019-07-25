@@ -6,7 +6,12 @@ import './declineMsg.scss';
 
 class declineMsg extends React.Component {
   state = {
-    msg: ''
+    msg: '',
+    modal: false
+  }
+
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
   }
 
   select = (event) => {

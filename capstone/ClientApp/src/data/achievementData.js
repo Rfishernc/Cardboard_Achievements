@@ -73,6 +73,16 @@ const getRecentProposedAchievements = (userId) => new Promise((resolve, reject) 
     })
 });
 
+const getProposedAchievementsForGame = (gameId, userId) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/achievement/proposed/${gameId}/${userId}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
 const addProposedAchievement = (newAchievement) => new Promise((resolve, reject) => {
   axios.post(`${DBURL}/achievement/proposed`, newAchievement)
     .then(() => {
@@ -121,6 +131,7 @@ export default {
   submitAchievement,
   getRecentAchievements,
   getRecentProposedAchievements,
+  getProposedAchievementsForGame,
   addProposedAchievement,
   getAchievementsToCheck,
   approveUserAchievement,

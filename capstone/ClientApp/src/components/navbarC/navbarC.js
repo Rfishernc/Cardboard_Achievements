@@ -6,6 +6,7 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Button,
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import firebase from 'firebase/app';
@@ -20,7 +21,8 @@ class navbarC extends React.Component {
   state = {
     gameMenu: false,
     currentUser: 2,
-    notificationsInfo: null
+    notificationsInfo: null,
+    popoverOpen: false
   }
 
   componentDidMount() {
@@ -30,6 +32,19 @@ class navbarC extends React.Component {
           this.setState({ notificationsInfo });
         })
     }
+  }
+
+  refresh = () => {
+    userData.getNotifications(this.state.currentUser)
+    .then((notificationsInfo) => {
+      this.setState({ notificationsInfo }, () => {
+        this.setState({ popoverOpen: true });
+      });
+    });
+  }
+
+  toggle = () => {
+    this.setState({ popoverOpen: !this.state.popoverOpen });
   }
 
   hovered = (event) => {
@@ -96,17 +111,6 @@ class navbarC extends React.Component {
             </div>;
   }
 
-  showNotifications = () => {
-    const renderArray = [];
-    this.state.notificationsInfo.forEach((notification) => {
-      renderArray.push(<Notification achievementName={notification.achievementName} gameName={notification.gameName}
-        description={notification.description} dateSubmitted={notification.dateSubmitted} declineMsg={notification.declineMsg}
-        link={notification.link} isApproved={notification.isApproved} image={notification.image}
-        key={`notification${notification.id}`} id={`notification${notification.id}`}/>);
-    });
-    return renderArray;
-  }
-
   render() {
     return(
       <div className='navbarC'>
@@ -124,8 +128,16 @@ class navbarC extends React.Component {
                 <NavLink tag={RRNavLink} to={`/achievements?Id=${this.state.currentUser}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-trophy"></i> My Achievements 
                 </NavLink>
-                {this.state.notificationsInfo ? <button className='notificationsButton' onClick={this.showNotifications}>
-                  <span class="badge badge-light">{this.state.notificationsInfo.length}</span></button> : null}
+
+                {this.state.notificationsInfo && this.state.notificationsInfo.length > 0 ? <Button className='notificationsButton btn-dark'
+                  id='notificationsButton' onClick={this.toggle}>
+                    <span className="badge badge-light">{this.state.notificationsInfo.length}</span>
+                  </Button> : null}
+                  
+                  {this.state.notificationsInfo && this.state.notificationsInfo.length > 0 ? 
+                    <Notification notificationsInfo={this.state.notificationsInfo}
+                    refresh={this.refresh} popoverOpen={this.state.popoverOpen}/> : null}
+
                 <NavLink tag={RRNavLink} to='/gamers' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-user-friends"></i> Gamers
                 </NavLink>

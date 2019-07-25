@@ -30,7 +30,7 @@ class myAchievements extends React.Component {
       
       Object.keys(this.state.achievementsInfo).forEach((game) => {
         this.state.achievementsInfo[game].forEach((achievement) => {
-          renderArray.push(<Achievement image={achievement.achievementImage} name={achievement.achievementName} key={achievement.id}
+          renderArray.push(<Achievement image={achievement.achievementImage} name={achievement.achievementName} key={`achievement${achievement.achievementId}`}
             difficulty={achievement.difficulty} description={achievement.description}
             dateAdded={achievement.dateAdded} dateSubmitted={achievement.dateSubmitted} voteStatus='approved'/>);
         });
@@ -106,7 +106,7 @@ class myAchievements extends React.Component {
               <p className='recentAchievementsTitle'>Your Recent Achievements</p>
               {this.recentAchievementsBuilder()}
             </div>
-            {this.state.isUser ? <div class="col-3 submitAchievementContainer">
+            {this.state.isUser ? <div className="col-3 submitAchievementContainer">
               <SubmitAchievement userId={this.state.userId}/>
             </div> : null}
           </div>

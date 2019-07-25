@@ -1,6 +1,5 @@
 import React from 'react';
 import achievementData from '../../data/achievementData';
-import gameData from '../../data/gameData';
 import blogData from '../../data/blogData';
 import userData from '../../data/userData';
 import Achievement from '../achievement/achievement';

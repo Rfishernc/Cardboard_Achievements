@@ -55,7 +55,7 @@ namespace capstone.Connections
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var queryString = @"Select Achievement.GameId, Achievement.Difficulty, Achievement.Name as AchievementName,
+                var queryString = @"Select Achievement.GameId, Achievement.Difficulty, Achievement.Name as AchievementName, Achievement.Id as AchievementId,
                                     Achievement.Description, Achievement.Image as AchievementImage, Achievement.DateAdded, UserAchievement.DateSubmitted
                                     From UserAchievement
                                     Join Achievement on Achievement.Id = UserAchievement.AchievementId
@@ -151,6 +151,22 @@ namespace capstone.Connections
                                     Where VotingIsActive = 1 
                                     Order by DateSubmitted Desc";
                 var achievements = connection.Query<Achievement>(queryString, new { userId });
+                return achievements;
+            }
+            throw new Exception("Could not get achievements.");
+        }
+
+        public IEnumerable<Achievement> GetProposedAchievementsForGame(ProposedAchievementsForGameRequest request)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Achievement.Id as AchievementId, Achievement.DateSubmitted, Difficulty, Description,
+                                        Achievement.Image, Achievement.Name as AchievementName, Vote.Id as VoteId
+                                    From Achievement
+                                    Left Join Vote on Vote.AchievementId = Achievement.Id AND Vote.UserId = @UserId
+                                    Where VotingIsActive = 1 AND Achievement.GameId = @GameId
+                                    Order by DateSubmitted Desc";
+                var achievements = connection.Query<Achievement>(queryString, request);
                 return achievements;
             }
             throw new Exception("Could not get achievements.");

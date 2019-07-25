@@ -40,14 +40,14 @@ namespace capstone.Controllers
             return Accepted(user);
         }
 
-        [HttpGet("${userId}/notifcations")]
+        [HttpGet("{userId}/notifications")]
         public ActionResult GetNotifications(int userId)
         {
             var notifications = _connection.GetNotifications(userId);
             return Accepted(notifications);
         }
 
-        [HttpPut("notified/${notificationId}")]
+        [HttpPut("notified/{notificationId}")]
         public ActionResult ClearNotification(int notificationId)
         {
             var notification = _connection.ClearNotification(notificationId);

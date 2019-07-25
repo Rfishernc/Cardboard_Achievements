@@ -15,7 +15,7 @@ class userOverview extends React.Component {
             </div>
             <div className='userInfoDiv col-3'>
               <p className='userInfoUnit'>{this.props.info.username}</p>
-              <img src={this.props.info.profilePic} className='profilePic'/>
+              <img src={this.props.info.profilePic} className='profilePic' alt=''/>
               <p className='userInfoUnit'>{this.props.info.points} Total Points Earned</p> 
             </div>
           </div>

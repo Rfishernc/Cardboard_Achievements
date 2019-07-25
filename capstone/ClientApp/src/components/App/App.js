@@ -6,6 +6,7 @@ import MyAchievements from '../myAchievements/myAchievements';
 import GamesList from '../gamesList/gamesList';
 import GameDetail from '../gameDetail/gameDetail';
 import ModeratorPortal from '../moderatorPortal/moderatorPortal';
+import VotingPage from '../voting/votingPage/votingPage';
 import connection from '../../data/connection';
 import firebase from 'firebase/app';
 import {
@@ -95,6 +96,7 @@ connection();
               <Route path='/achievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/game' component={GameDetail} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
               <Route path='/mods' component={ModeratorPortal} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
+              <Route path='/voting' component={VotingPage} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={currentUser}/>
             </Switch>
               </div>
           </React.Fragment>

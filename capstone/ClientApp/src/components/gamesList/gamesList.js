@@ -1,7 +1,6 @@
 import React from 'react';
 import gameData from '../../data/gameData';
 import achievementData from '../../data/achievementData';
-import { Link } from 'react-router-dom';
 import SearchBar from '../searchBar/searchbar';
 import './gamesList.scss';
 

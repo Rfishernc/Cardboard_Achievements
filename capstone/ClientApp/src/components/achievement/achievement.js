@@ -43,7 +43,7 @@ class achievement extends React.Component {
         id={this.props.gameName ? `achievement${this.props.gameId}` : null}
         onMouseEnter={this.props.gameName ? this.props.hovered : null} onMouseLeave={this.props.gameName ? this.props.hoveredOut : null}>
         <div className='achievementImgContainer achievementContainer'>
-          <img src={this.props.image} className='achievementImg'/>
+          <img src={this.props.image} className='achievementImg' alt=''/>
           {this.props.dateAdded ? <p className='achievementDate'>{this.props.dateAdded.replace('T00:00:00', '')}</p> : null}
           {this.votingStatusBuilder()}
         </div>
