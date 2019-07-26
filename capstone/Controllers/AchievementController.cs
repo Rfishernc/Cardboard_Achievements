@@ -78,6 +78,13 @@ namespace capstone.Controllers
             return Accepted(achievements);
         }
 
+        [HttpGet("search/{achievementId}")]
+        public ActionResult GetAchievementForSearchResult(int achievementId)
+        {
+            var achievement = _connection.GetAchievementForSearchResult(achievementId);
+            return Accepted(achievement);
+        }
+
         [HttpPost]
         public ActionResult SubmitAchievement(NewUserAchievementRequest newAchievement)
         {
@@ -105,5 +112,6 @@ namespace capstone.Controllers
             var userAchievement = _connection.DeclineUserAchievement(request);
             return Accepted(userAchievement);
         }
+
     }
 }

@@ -47,11 +47,19 @@ namespace capstone.Controllers
             return Accepted(notifications);
         }
 
+        [HttpGet("search/{userId}")]
+        public ActionResult GetUserForSearchResult(int userId)
+        {
+            var user = _connection.GetUserForSearchResult(userId);
+            return Accepted(user);
+        }
+
         [HttpPut("notified/{notificationId}")]
         public ActionResult ClearNotification(int notificationId)
         {
             var notification = _connection.ClearNotification(notificationId);
             return Accepted(notification);
         }
+
     }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import gameData from '../../data/gameData';
 import achievementData from '../../data/achievementData';
+import userData from '../../data/userData';
 import SearchBar from '../searchBar/searchbar';
 import './gamesList.scss';
 
@@ -8,13 +9,15 @@ class gamesList extends React.Component {
   state = {
     gamesInfo: null,
     popularityInfo: null,
+    userInfo: null,
     selectedUser: window.location.pathname.slice(7),
     popularity: false,
     name: true,
     new: false,
     card: true,
     list: false,
-    sort: 'name'
+    sort: 'name',
+    currentUser: 2
   }
 
   componentDidMount() {
@@ -46,6 +49,12 @@ class gamesList extends React.Component {
     } 
     
     else {
+      if (this.state.currentUser !== this.state.selectedUser) {
+        userData.getUserForSearchResult(this.state.selectedUser)
+          .then((userInfo) => {
+            this.setState({ userInfo });
+          });
+      }
       gameData.getUsersGames(this.state.selectedUser)
         .then((gamesInfo) => {
           this.setState({ gamesInfo }, () => {
@@ -190,11 +199,22 @@ class gamesList extends React.Component {
     }
   }
 
+  userInfoBuilder = () => {
+    if (this.state.userInfo !== null) {
+          return <div className='userInfoContainer'>
+            <p>{this.state.userInfo.username}</p>
+            <img src={this.state.userInfo.profilePic} alt=''/>
+            <p>Joined {this.state.userInfo.joinDate.replace('T00:00:00', '')}</p>
+            <p>{this.state.userInfo.points} Total Points  {this.state.userInfo.totalAchievements} Total Achievements</p>
+          </div>;
+    }
+  }
+
   render() {
     return(
       <div className='gamesList'>
         <div className='searchAndSort'>
-          <SearchBar/>
+          <SearchBar games={true}/>
           <div className='sortContainer'>
             <p className='sortTitle'>Sort By: </p>
             <div className='form-check form-check-inline'>
@@ -222,7 +242,12 @@ class gamesList extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}
+        <div className='infoContainer'>
+          {this.state.selectedUser !== 'all' ? this.userInfoBuilder() : null}
+          <div className='gameListingContainer'>
+            {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}
+          </div>
+        </div>
       </div>
     );
   }

@@ -121,7 +121,7 @@ class navbarC extends React.Component {
           <NavbarToggler onClick={this.toggle} />
             <Nav className="ml-auto" navbar>
               <NavItem className='navLinks'>
-                <SearchBar className="searchBar"/>
+                <SearchBar className="searchBar" games={true} achievements={true} users={true}/>
                 <NavLink tag={RRNavLink} to='/home' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-home"></i> Home
                 </NavLink>

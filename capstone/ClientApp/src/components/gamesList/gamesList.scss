@@ -35,3 +35,21 @@
 .gameListing {
   display: flex;
 }
+
+.infoContainer {
+  display: flex;
+  flex-flow: column;
+}
+
+.gameListingContainer {
+  display: flex;
+}
+
+.userInfoContainer {
+  display: flex;
+  flex-flow: column wrap;
+  border: 1.5px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: khaki;
+}

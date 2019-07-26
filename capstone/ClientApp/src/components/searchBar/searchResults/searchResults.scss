@@ -1,0 +1,29 @@
+.dropdownBeGone {
+  width: 1px;
+  height: 1px;
+}
+
+.gameItem {
+  background-color: brown;
+}
+
+.achievementItem {
+  background-color: peru;
+}
+
+.userItem {
+  background-color: blue;
+}
+
+.searchMenu {
+  display: flex !important;
+  flex-flow: column !important;
+  background-color: black;
+}
+
+.gameItem, .achievementItem, .userItem {
+  border: 1px solid white;
+  padding: 4px;
+  margin: 2px;
+  color: white;
+}

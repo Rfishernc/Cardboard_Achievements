@@ -123,6 +123,16 @@ const declineUserAchievement = (userAchievementId, msg) => new Promise((resolve,
     });
 });
 
+const getAchievementForSearchResult = (achievementId) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/achievement/search/${achievementId}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+
 export default {
   getUsersAchievementsForGame,
   getPopularity,
@@ -136,4 +146,5 @@ export default {
   getAchievementsToCheck,
   approveUserAchievement,
   declineUserAchievement,
+  getAchievementForSearchResult,
 }

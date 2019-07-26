@@ -172,6 +172,24 @@ namespace capstone.Connections
             throw new Exception("Could not get achievements.");
         }
 
+        public Achievement GetAchievementForSearchResult(int achievementId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Achievement.Name as AchievementName, Game.Name as GameName, Achievement.DateAdded, Achievement.Description,
+                                        Achievement.Image, Achievement.Difficulty
+                                    From Achievement
+                                    Join Game on Game.Id = Achievement.GameId
+                                    Where Achievement.Id = @AchievementId AND IsApproved = 1";
+                var achievement = connection.QueryFirstOrDefault<Achievement>(queryString, new { achievementId });
+                if (achievement != null)
+                {
+                    return achievement;
+                }
+            }
+            throw new Exception("Could not get achievement");
+        }
+
         public NewAchievement AddProposedAchievement(ProposedAchievementRequest proposedAchievementRequest)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))

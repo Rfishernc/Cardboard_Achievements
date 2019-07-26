@@ -96,6 +96,29 @@ namespace capstone.Connections
             throw new Exception("Could not get user info.");
         }
 
+        public User GetUserForSearchResult(int userId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select [User].Username, [User].Points, [User].ProfilePic, [User].JoinDate
+                                    From [User]
+                                    Join UserAchievement on UserAchievement.UserId = [User].Id
+                                    Where [User].Id = @UserId AND UserAchievement.IsApproved = 1";
+                var user = connection.Query<User>(queryString, new { userId });
+                var totalAchievements = user.Count();
+                var returnUser = new User()
+                {
+                    Username = user.First().Username,
+                    Points = user.First().Points,
+                    ProfilePic = user.First().ProfilePic,
+                    JoinDate = user.First().JoinDate,
+                    TotalAchievements = totalAchievements
+                };
+                return returnUser;
+            }
+            throw new Exception("Could not get user");
+        }
+
         public User UpdateUserPoints(SqlConnection connection, int userId, int points)
         {
             var queryString = @"Update User

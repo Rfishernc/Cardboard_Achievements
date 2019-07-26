@@ -43,9 +43,20 @@ const clearNotification = (notificationId) => new Promise((resolve, reject) => {
     })
 });
 
+const getUserForSearchResult = (userId) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/user/search/${userId}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+
 export default {
   getGamers,
   getUserOverview,
   getNotifications,
   clearNotification,
+  getUserForSearchResult,
 }

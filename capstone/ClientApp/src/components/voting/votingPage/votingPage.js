@@ -20,7 +20,6 @@ class votingPage extends React.Component {
   render() {
     return(
       <div className='votingPage'>
-        <p>Youre on voting page</p>
         <Voting userId={this.state.currentUser} achievements={this.state.achievementInfo}/>
       </div>
     );

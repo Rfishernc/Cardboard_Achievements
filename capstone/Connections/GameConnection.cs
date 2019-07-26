@@ -107,5 +107,49 @@ namespace capstone.Connections
             }
             throw new Exception("Failed to get player info.");
         }
+
+        public NamesGroup GetNames()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var gameQueryString = @"Select Name, Id
+                                        From Game";
+                var gameNames = connection.Query<SearchItem>(gameQueryString);
+
+                var achievementQueryString = @"Select Name, Id
+                                               From Achievement
+                                               Where IsApproved = 1";
+                var achievementNames = connection.Query<SearchItem>(achievementQueryString);
+
+                var userQueryString = @"Select Username as Name, Id
+                                        From [User]";
+                var usernames = connection.Query<SearchItem>(userQueryString);
+
+                var names = new NamesGroup() { GameNames = gameNames, Usernames = usernames, AchievementNames = achievementNames };
+                return names;
+            }
+            throw new Exception("Could not get names");
+        }
+
+        public Game GetGameForSearchResult(int gameId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Game.Link, Game.Name, Game.Image
+                                    From Game
+                                    Join Achievement on Achievement.GameId = Game.Id
+                                    Where Game.Id = @GameId AND Achievement.IsApproved = 1";
+                var game = connection.Query<Game>(queryString, new { gameId });
+                var achievementCount = game.Count();
+                var returnGame = new Game() {
+                    AchievementCount = achievementCount,
+                    Link = game.First().Link,
+                    Image = game.First().Image,
+                    Name = game.First().Name
+                };
+                return returnGame;
+            }
+            throw new Exception("Could not get game");
+        }
     }
 }

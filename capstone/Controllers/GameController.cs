@@ -48,5 +48,19 @@ namespace capstone.Controllers
             var popularity = _connection.GetGamePopularity(gameId);
             return Accepted(popularity);
         }
+
+        [HttpGet("names")]
+        public ActionResult GetNames()
+        {
+            var names = _connection.GetNames();
+            return Accepted(names);
+        }
+
+        [HttpGet("search/{gameId}")]
+        public ActionResult GetGameForSearchResult(int gameId)
+        {
+            var game = _connection.GetGameForSearchResult(gameId);
+            return Accepted(game);
+        }
     }
 }

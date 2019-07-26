@@ -10,7 +10,7 @@ class gameDetail extends React.Component {
     gameInfo: null,
     playersInfo: null,
     achievementInfo: [],
-    currentUser: 2
+    currentUser: 2,
   }
 
   componentDidMount() {

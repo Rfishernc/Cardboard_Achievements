@@ -136,7 +136,7 @@ class gamers extends React.Component {
       <div className='gamers'>
         <div className='gamersSearch'>
           <p className='gamersSearchTitle'>Search gamers</p>
-          <SearchBar/>
+          <SearchBar users={true}/>
         </div>
         <div className='gamersContainer'>
           <p className='gamersTitle'>Monthly Leaders</p>

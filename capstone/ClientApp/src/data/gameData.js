@@ -53,10 +53,32 @@ const getGamePopularity = (gameId) => new Promise((resolve, reject) => {
     })
 });
 
+const getNames = () => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/game/names`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
+const getGameForSearchResult = (gameId) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/game/search/${gameId}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+
 export default {
   getAllGames,
   getUsersGames,
   getGameDetails,
   getNumberOfPlayers,
   getGamePopularity,
+  getNames,
+  getGameForSearchResult,
 }
