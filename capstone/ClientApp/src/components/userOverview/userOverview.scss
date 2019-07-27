@@ -1,0 +1,25 @@
+.userOverview {
+  height: 200px;
+  border-bottom: 1.5px solid black;
+  background-image: url('../../images/tabletop.jpg');
+  background-size: cover;
+}
+
+.userInfoDiv {
+  margin-top: 20px;
+  background-color: darkgrey;
+  border: 1.5px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 50px;
+}
+
+.profilePic {
+  width: 100px;
+  height: 100px;
+}
+
+.overviewAchievement {
+  margin-left: 20px;
+}

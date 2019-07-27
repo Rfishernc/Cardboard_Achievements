@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Hangfire;
+using System;
+using Hangfire.SqlServer;
 
 namespace capstone
 {
@@ -51,12 +54,19 @@ namespace capstone
             services.AddTransient<VoteConnection>();
             services.AddTransient<UserConnection>();
             services.AddTransient<BlogConnection>();
+            services.AddTransient<UpdateAchievements>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            var connectionString = Configuration.GetSection("ConnectionString").Value;
+
+            services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+            services.AddHangfireServer();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +75,7 @@ namespace capstone
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseHangfireDashboard();
             }
             else
             {
@@ -97,6 +108,10 @@ namespace capstone
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            RecurringJob.AddOrUpdate("update-voting-statuses", (UpdateAchievements updater) => updater.UpdateVotingStates(), Cron.Daily);
+            RecurringJob.AddOrUpdate("add-monthly-top-voted", (UpdateAchievements updater) => updater.UpdateMonthsAchievements(), Cron.Monthly);
+
         }
     }
 }

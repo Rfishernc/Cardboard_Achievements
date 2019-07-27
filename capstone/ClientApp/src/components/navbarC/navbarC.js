@@ -6,17 +6,45 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Button,
 } from 'reactstrap';
 import { NavLink as RRNavLink } from 'react-router-dom';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import SearchBar from '../searchBar/searchbar';
 import Login from '../login/login';
+import Notification from './notification/notification';
+import userData from '../../data/userData';
 import './navbarC.scss';
 
 class navbarC extends React.Component {
   state = {
-    gameMenu: false
+    gameMenu: false,
+    currentUser: 2,
+    notificationsInfo: null,
+    popoverOpen: false
+  }
+
+  componentDidMount() {
+    if (this.state.currentUser) {
+      userData.getNotifications(this.state.currentUser)
+        .then((notificationsInfo) => {
+          this.setState({ notificationsInfo });
+        })
+    }
+  }
+
+  refresh = () => {
+    userData.getNotifications(this.state.currentUser)
+    .then((notificationsInfo) => {
+      this.setState({ notificationsInfo }, () => {
+        this.setState({ popoverOpen: true });
+      });
+    });
+  }
+
+  toggle = () => {
+    this.setState({ popoverOpen: !this.state.popoverOpen });
   }
 
   hovered = (event) => {
@@ -78,7 +106,7 @@ class navbarC extends React.Component {
 
   gameMenu = () => {
     return <div id='gameMenu' onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut}>
-              <NavLink tag={RRNavLink} to='/games+my' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
+              <NavLink tag={RRNavLink} to={`/games+${this.state.currentUser}`} onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
               <NavLink tag={RRNavLink} to='/games+all' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
             </div>;
   }
@@ -93,13 +121,23 @@ class navbarC extends React.Component {
           <NavbarToggler onClick={this.toggle} />
             <Nav className="ml-auto" navbar>
               <NavItem className='navLinks'>
-                <SearchBar className="searchBar"/>
+                <SearchBar className="searchBar" games={true} achievements={true} users={true}/>
                 <NavLink tag={RRNavLink} to='/home' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-home"></i> Home
                 </NavLink>
-                <NavLink tag={RRNavLink} to='/myachievements' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
-                  <i className="fas fa-trophy"></i> My Achievements
+                <NavLink tag={RRNavLink} to={`/achievements?Id=${this.state.currentUser}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
+                  <i className="fas fa-trophy"></i> My Achievements 
                 </NavLink>
+
+                {this.state.notificationsInfo && this.state.notificationsInfo.length > 0 ? <Button className='notificationsButton btn-dark'
+                  id='notificationsButton' onClick={this.toggle}>
+                    <span className="badge badge-light">{this.state.notificationsInfo.length}</span>
+                  </Button> : null}
+                  
+                  {this.state.notificationsInfo && this.state.notificationsInfo.length > 0 ? 
+                    <Notification notificationsInfo={this.state.notificationsInfo}
+                    refresh={this.refresh} popoverOpen={this.state.popoverOpen}/> : null}
+
                 <NavLink tag={RRNavLink} to='/gamers' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-user-friends"></i> Gamers
                 </NavLink>

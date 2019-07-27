@@ -11,5 +11,6 @@ namespace capstone.Models
         public string Name { get; set; }
         public string Link { get; set; }
         public string Image { get; set; }
+        public int AchievementCount { get; set; }
     }
 }

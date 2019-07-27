@@ -1,0 +1,87 @@
+.gamesList {
+  display: flex;
+  margin-left: 50px;
+  flex-flow:  row wrap;
+  background-image: url('../../images/pieces.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.gameCard {
+  margin-right: 50px;
+  margin-top: 50px;
+}
+
+.gameImg {
+  height: 280px;
+}
+
+.searchAndSort {
+  margin-left: -25px;
+  margin-right: 25px;
+  border: 1.5px solid black;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: white;
+}
+
+.form-check-input {
+  margin-left: 5px !important;
+}
+
+.sortContainer {
+  margin-top: 15px;
+}
+
+.listText {
+  width: 200px;
+}
+
+.gameListing {
+  display: flex;
+}
+
+.infoContainer {
+  display: flex;
+  flex-flow: column;
+}
+
+.gameListingContainer {
+  display: flex;
+}
+
+.userInfoContainer {
+  display: flex;
+  flex-flow: column wrap;
+  border: 1.5px solid black;
+  border-radius: 3px;
+  padding: 5px;
+  background-color: khaki;
+}
+
+.userInfoMisc {
+  font-size: 0.9em;
+  margin-bottom: 0;
+}
+
+.userInfoDate {
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.userInfoContainer {
+  padding: 20px;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 50%;
+}
+
+.userInfoTitle {
+  font-size: 1.2em;
+}
+
+.gameListRow {
+  width: 100%;
+}
