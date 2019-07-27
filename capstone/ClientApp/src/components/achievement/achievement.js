@@ -39,21 +39,21 @@ class achievement extends React.Component {
 
   render() {
     return(
-      <div className='achievement' onClick={this.props.gameName ? this.props.historyPusher : null} 
+      <div className='achievement row' onClick={this.props.gameName ? this.props.historyPusher : null} 
         id={this.props.gameName ? `achievement${this.props.gameId}` : null}
         onMouseEnter={this.props.gameName ? this.props.hovered : null} onMouseLeave={this.props.gameName ? this.props.hoveredOut : null}>
-        <div className='achievementImgContainer achievementContainer'>
+        <div className='achievementImgContainer achievementContainer col-3'>
           <img src={this.props.image} className='achievementImg' alt=''/>
           {this.props.dateAdded ? <p className='achievementDate'>{this.props.dateAdded.replace('T00:00:00', '')}</p> : null}
           {this.votingStatusBuilder()}
         </div>
-        <div className='achievementInfoContainer achievementContainer'>
-          <p className='achievementInfoUnit'>{this.props.name}</p>
+        <div className='achievementInfoContainer achievementContainer col-6'>
+          <p className='achievementInfoUnit achievementTitle'>{this.props.name}</p>
           {this.props.gameName ? <p className='achievementInfoUnit'>Game: {this.props.gameName}</p> : null}
           <p className='achievementInfoUnit'>Difficulty: {this.difficultyConverter()}</p>
           <p className='achievementInfoUnit'>{this.props.description}</p>
         </div>
-        <div className='achievementStatusContainer achievementContainer'>
+        <div className='achievementStatusContainer achievementContainer col-1'>
           {this.props.completed ? <p>{this.props.completed}</p> : null}
         </div>
       </div>

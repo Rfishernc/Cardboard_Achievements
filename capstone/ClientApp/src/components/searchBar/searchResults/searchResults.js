@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import ResultDetail from '../resultDetail/resultDetail';
 import achievementData from '../../../data/achievementData';
@@ -47,13 +47,23 @@ class searchResults extends React.Component {
 
               searchResultIds.push(searchType + dbName.Id);
               searchResultRender.push(<Link className={`${searchType}Item`} value={dbName.name} id={`${searchType}search${dbName.id}`}
-                onClick={this.selection} onMouseEnter={this.startCount} to={this.selection(dbName, searchType)}>{dbName.name}</Link>);
+                onClick={this.selection} onMouseEnter={this.startCount} to={this.selection(dbName, searchType)}
+                key={`${searchType}search${dbName.id}`}>{this.iconBuilder(searchType)} {dbName.name}</Link>);
           }
     
         });
       });
     });
     return searchResultRender;
+  }
+
+  iconBuilder = (searchType) => {
+    switch (searchType) {
+      case 'game' : return <p className='resultIcon'>G</p>;
+      case 'user' : return <p className='resultIcon'>U</p>;
+      case 'achievement' : return <p className='resultIcon'>A</p>;
+      default : break;
+    }
   }
 
   startCount = (event) => {

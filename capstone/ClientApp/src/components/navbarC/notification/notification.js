@@ -26,7 +26,7 @@ class notification extends React.Component {
           <div>
             <div>
              <p>{notification.achievementName}</p>
-              <img src={notification.image}/>
+              <img src={notification.image} alt=''/>
             </div>
             <p>{notification.gameName}</p>
             <p>{notification.description}</p>  
@@ -39,15 +39,16 @@ class notification extends React.Component {
             {notification.isApproved ? `Your ${notification.achievementName} achievement was approved` : 
               `Your ${notification.achievementName} achievement was declined`}
           </PopoverHeader>
-          <p className='notificationUnit'>Your submission for {notification.achievementName} was declined.</p>
           <p>Reason for Decline: {notification.declineMsg}</p>
-          <div>
-            <div>
+          <div className='notificationAchievement'>
+            <div className='achievementImgContainer'>
              <p>{notification.achievementName}</p>
-              <img src={notification.image}/>
+              <img src={notification.image} alt='' className='achievementImg'/>
             </div>
-            <p>{notification.gameName}</p>
-            <p>{notification.description}</p>  
+            <div className='notificationInfoContainer'>
+              <p>{notification.gameName}</p>
+              <p>{notification.description}</p>  
+            </div>
           </div>
           <Button className='btn btn-sm btn-dark' id={`notification${notification.id}`} onClick={this.notified}>Ok</Button>
       </div>}</div>);

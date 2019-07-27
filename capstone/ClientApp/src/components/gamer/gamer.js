@@ -8,7 +8,7 @@ class gamer extends React.Component {
         <div className="card mb-3 gamerCard" style={{maxWidth: '540px'}}>
           <div className="row no-gutters">
             <div className="col-md-4">
-              <img src={this.props.info.profilePic} className="card-img gamerImg" alt="..."/>
+              <img src={this.props.info.profilePic} className="card-img profilePic" alt="..."/>
             </div>
             <div className="col-md-8">
               {this.props.isMonthly ? 

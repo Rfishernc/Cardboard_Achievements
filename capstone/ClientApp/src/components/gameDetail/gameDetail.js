@@ -74,9 +74,9 @@ class gameDetail extends React.Component {
     if (this.state.gameInfo !== null) {
       const renderArray = [];
       this.state.gameInfo.forEach((achievement) => {
-        renderArray.push(<Achievement image={achievement.achievementImage} name={achievement.achievementName} key={achievement.id}
+        renderArray.push(<Achievement image={achievement.achievementImage} name={achievement.achievementName} key={achievement.achievementId}
           difficulty={achievement.difficulty} description={achievement.description} dateAdded={achievement.dateAdded}
-          completed={this.state.currentUser ? (achievement.completed ? 'Completed' : 'Not Completed') : null} voteStatus='approved'/>);
+          completed={this.state.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null} voteStatus='approved'/>);
       });
       return renderArray;
     }
@@ -86,7 +86,9 @@ class gameDetail extends React.Component {
     return(
       <div className='gameDetail'>
         {this.detailsBuilder()}
-        {this.achievementsBuilder()}
+        <div className='gameAchievementsContainer'>
+          {this.achievementsBuilder()}
+        </div>
       </div>
     );
   }

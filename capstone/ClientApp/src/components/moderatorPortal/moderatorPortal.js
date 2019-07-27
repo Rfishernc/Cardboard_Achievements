@@ -24,7 +24,7 @@ class moderatorPortal extends React.Component {
     const renderArray = [];
     if (this.state.achievementsInfo != null) {
       this.state.achievementsInfo.forEach((achievement) => {
-        renderArray.push(<div className='userAchievementContainer' id={`UAContainer${achievement.userAchievementId}`} key={`UAContainer${achievement.userAchievementId}`}>
+        renderArray.push(<div className='userAchievementContainer container' id={`UAContainer${achievement.userAchievementId}`} key={`UAContainer${achievement.userAchievementId}`}>
 
           <Achievement key={`achievement${achievement.achievementId}`} id={`achievement${achievement.achievementId}`}
             name={achievement.achievementName} image={achievement.achievementImage} description={achievement.description} 

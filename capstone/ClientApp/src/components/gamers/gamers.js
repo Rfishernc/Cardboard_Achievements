@@ -139,13 +139,17 @@ class gamers extends React.Component {
           <SearchBar users={true}/>
         </div>
         <div className='gamersContainer'>
-          <p className='gamersTitle'>Monthly Leaders</p>
+          <div className='titleContainer'>
+            <p className='gamersTitle'>Monthly Leaders</p>
+          </div>
           <div className='gamerCardContainer'>
             {this.monthlyLeadersBuilder()}
           </div>
         </div>
         <div className='gamersBotContainer'>
-          <p className='gamersTitle'>All Time Leaders</p>
+          <div className='titleContainer'>
+            <p className='gamersTitle'>All Time Leaders</p>
+          </div>
           <div className='gamerCardContainer'>
             {this.allTimeLeadersBuilder()}
           </div>

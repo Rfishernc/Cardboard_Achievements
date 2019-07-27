@@ -56,7 +56,7 @@ class home extends React.Component {
         renderArray.push(<Achievement name={achievement.achievementName} image={achievement.image} description={achievement.description} 
           difficulty={achievement.difficulty} dateAdded={achievement.dateAdded} gameName={achievement.gameName} gameId={achievement.gameId}
           historyPusher={this.achievementHistoryPusher} hovered={this.hovered} hoveredOut={this.hoveredOut}
-          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.state.currentUser ? (achievement.completed ? 'Completed' : 'Not Completed') : null}/>);
+          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.state.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
       });
     }
     return renderArray;
@@ -89,11 +89,11 @@ class home extends React.Component {
       <div className='home'>
         {this.state.userInfo ? <UserOverview info={this.state.userInfo}/> : null}
         <div className='container-fluid'>
-          <div className='row'>
+          <div className='row homelow'>
             <div className='col-3'>
               <Voting achievements={this.state.votingInfo} userId={this.state.currentUser}/>
             </div>
-            <div className='col-5'>
+            <div className='col-5 blogCol'>
               {this.blogBuilder()}
             </div>
             <div className='col-4'>

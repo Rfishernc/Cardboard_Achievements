@@ -22,14 +22,16 @@ class userAchievement extends React.Component {
 
   render() {
     return(
-      <div className='userAchievement'>
-        <div className='userInfoContainer'>
+      <div className='userAchievement row'>
+        <div className='uAContainer'>
           <p className='userAchievementUnit'>{this.props.username}</p>
           <p className='userAchievementUnit'>Submitted on {this.props.dateSubmitted.replace('T00:00:00', '')}</p>
           <a href={this.props.link} className='userAchievementUnit'>Evidence Link</a>
         </div>
         <div className='modButtonContainer'>
-          <Button className='btn btn-sm btn-dark' onClick={this.approve}>Approve</Button>
+          <div>
+            <Button className='btn btn-sm btn-dark' onClick={this.approve}>Approve</Button>
+          </div>
           <DeclineMsg decline={this.decline}/>
         </div>
       </div>

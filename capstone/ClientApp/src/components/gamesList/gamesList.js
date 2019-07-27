@@ -202,18 +202,23 @@ class gamesList extends React.Component {
   userInfoBuilder = () => {
     if (this.state.userInfo !== null) {
           return <div className='userInfoContainer'>
-            <p>{this.state.userInfo.username}</p>
-            <img src={this.state.userInfo.profilePic} alt=''/>
-            <p>Joined {this.state.userInfo.joinDate.replace('T00:00:00', '')}</p>
-            <p>{this.state.userInfo.points} Total Points  {this.state.userInfo.totalAchievements} Total Achievements</p>
+            <div>
+              <p className='userInfoTitle'>{this.state.userInfo.username}</p>
+              <img src={this.state.userInfo.profilePic} alt='' className='profilePic'/>
+            </div>
+            <div className='userMiscContainer'>
+              <p className='userInfoDate'>Joined {this.state.userInfo.joinDate.replace('T00:00:00', '')}</p>
+              <p className='userInfoMisc'>{this.state.userInfo.points} Total Points  {this.state.userInfo.totalAchievements} Total Achievements</p>
+            </div>
           </div>;
     }
   }
 
   render() {
     return(
-      <div className='gamesList'>
-        <div className='searchAndSort'>
+      <div className='gamesList container-fluid'>
+        <div className='row gameListRow'>
+        <div className='searchAndSort col-2'>
           <SearchBar games={true}/>
           <div className='sortContainer'>
             <p className='sortTitle'>Sort By: </p>
@@ -242,11 +247,12 @@ class gamesList extends React.Component {
             </div>
           </div>
         </div>
-        <div className='infoContainer'>
+        <div className='infoContainer col-10'>
           {this.state.selectedUser !== 'all' ? this.userInfoBuilder() : null}
           <div className='gameListingContainer'>
             {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}
           </div>
+        </div>
         </div>
       </div>
     );

@@ -1,0 +1,15 @@
+.notificationAchievement {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  border: 1.5px solid black;
+  padding: 5px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+  background-color: darkgray;
+}
+
+.notificationInfoContainer {
+  display: flex;
+  flex-flow: column;
+}

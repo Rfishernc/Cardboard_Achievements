@@ -103,16 +103,24 @@ class myAchievements extends React.Component {
         <div className="container-fluid">
           <div className="row achievementsUpper">
             <div className="col-9 recentAchievements">
-              <p className='recentAchievementsTitle'>Your Recent Achievements</p>
-              {this.recentAchievementsBuilder()}
+              <div className='titleContainer'>
+                <p className='recentAchievementsTitle'>Your Recent Achievements</p>
+              </div>
+              <div className='recentAchievementsContainer'>
+                {this.recentAchievementsBuilder()}
+              </div>
             </div>
             {this.state.isUser ? <div className="col-3 submitAchievementContainer">
               <SubmitAchievement userId={this.state.userId}/>
             </div> : null}
           </div>
           <div className='myAchievementsLower'>
-            <p>Your Achievements</p>
-            {this.gamesCardBuilder()}
+            <div className='titleContainer'>
+              <p className='myAchievementsTitle'>Your Achievements By Game</p>
+            </div>
+            <div className='myAchievementsContainer'>
+              {this.gamesCardBuilder()}
+            </div>
           </div>
         </div>
       </div>

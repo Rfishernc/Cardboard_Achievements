@@ -15,3 +15,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.gameAchievementsContainer {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.gameAchievementsContainer > div {
+  margin: 10px;
+}

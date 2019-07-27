@@ -9,9 +9,16 @@
 
 .modButtonContainer {
   display: flex;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  padding-right: 10px;
 }
 
 .userAchievement {
   display: flex;
   justify-content: space-between;
+}
+
+.modButtonContainer > div {
+  margin: 5px;
 }

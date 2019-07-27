@@ -17,7 +17,7 @@ class resultDetail extends React.Component {
     return <div>
       <p>{this.props.achievementName}</p>
       <p>Game: {this.props.gameName}</p>
-      <img src={this.props.image} alt=''/>
+      <img src={this.props.image} alt='' className='achievementImg'/>
       <p>{this.props.dateAdded.replace('T00:00:00', '')}</p>
       <p>{this.props.description}</p>
       <p>Difficulty: {this.difficultyConverter()}</p>
@@ -27,7 +27,7 @@ class resultDetail extends React.Component {
   userBuilder = () => {
     return <div>
       <p>{this.props.username}</p>
-      <img src={this.props.profilePic} alt=''/>
+      <img src={this.props.profilePic} alt='' className='achievementImg'/>
       <p>Joined {this.props.joinDate.replace('T00:00:00', '')}</p>
       <p>{this.props.points} Total Points  {this.props.totalAchievements} Total Achievements</p>
     </div>
