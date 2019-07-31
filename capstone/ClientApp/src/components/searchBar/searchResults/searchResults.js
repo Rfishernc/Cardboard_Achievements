@@ -46,9 +46,17 @@ class searchResults extends React.Component {
             && !searchResultIds.includes(searchType + dbName.Id) && counter > 0) {
 
               searchResultIds.push(searchType + dbName.Id);
-              searchResultRender.push(<Link className={`${searchType}Item`} value={dbName.name} id={`${searchType}search${dbName.id}`}
-                onClick={this.selection} onMouseEnter={this.startCount} to={this.selection(dbName, searchType)}
-                key={`${searchType}search${dbName.id}`}>{this.iconBuilder(searchType)} {dbName.name}</Link>);
+              if (this.props.noPreview) {
+                searchResultRender.push(<div id={`${searchType}search${dbName.id}`} key={`${searchType}search${dbName.id}`} 
+                  className={`${searchType}Item`} onClick={this.props.selection} value={dbName.name}>
+                  {this.iconBuilder(searchType)} {dbName.name}
+                </div>);
+              } 
+              else {
+                searchResultRender.push(<Link className={`${searchType}Item`} value={dbName.name} id={`${searchType}search${dbName.id}`}
+                  onClick={this.selection} onMouseEnter={this.props.noPreview ? null : this.startCount} to={this.selection(dbName, searchType)}
+                  key={`${searchType}search${dbName.id}`}>{this.iconBuilder(searchType)} {dbName.name}</Link>);
+              }   
           }
     
         });

@@ -10,16 +10,15 @@ class gameDetail extends React.Component {
     gameInfo: null,
     playersInfo: null,
     achievementInfo: [],
-    currentUser: 2,
   }
 
   componentDidMount() {
     const gameId = window.location.href.slice(window.location.href.search('=') + 1);
-    gameData.getGameDetails(gameId, this.state.currentUser)
+    gameData.getGameDetails(gameId, this.props.currentUser)
       .then((gameInfo) => {
         this.setState({ gameInfo });
       });
-    achievementData.getUsersAchievementsForGame(this.state.currentUser, gameId)
+    achievementData.getUsersAchievementsForGame(this.props.currentUser, gameId)
       .then((achievementInfo) => {
         this.setState({ achievementInfo });
       });
@@ -76,7 +75,7 @@ class gameDetail extends React.Component {
       this.state.gameInfo.forEach((achievement) => {
         renderArray.push(<Achievement image={achievement.achievementImage} name={achievement.achievementName} key={achievement.achievementId}
           difficulty={achievement.difficulty} description={achievement.description} dateAdded={achievement.dateAdded}
-          completed={this.state.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null} voteStatus='approved'/>);
+          completed={this.props.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null} voteStatus='approved'/>);
       });
       return renderArray;
     }

@@ -20,14 +20,13 @@ import './navbarC.scss';
 class navbarC extends React.Component {
   state = {
     gameMenu: false,
-    currentUser: 2,
     notificationsInfo: null,
     popoverOpen: false
   }
 
   componentDidMount() {
-    if (this.state.currentUser) {
-      userData.getNotifications(this.state.currentUser)
+    if (this.props.currentUser) {
+      userData.getNotifications(this.props.currentUser)
         .then((notificationsInfo) => {
           this.setState({ notificationsInfo });
         })
@@ -35,7 +34,7 @@ class navbarC extends React.Component {
   }
 
   refresh = () => {
-    userData.getNotifications(this.state.currentUser)
+    userData.getNotifications(this.props.currentUser)
     .then((notificationsInfo) => {
       this.setState({ notificationsInfo }, () => {
         this.setState({ popoverOpen: true });
@@ -106,7 +105,7 @@ class navbarC extends React.Component {
 
   gameMenu = () => {
     return <div id='gameMenu' onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut}>
-              <NavLink tag={RRNavLink} to={`/games+${this.state.currentUser}`} onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
+              <NavLink tag={RRNavLink} to={`/games+${this.props.currentUser}`} onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink>
               <NavLink tag={RRNavLink} to='/games+all' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
             </div>;
   }
@@ -125,7 +124,7 @@ class navbarC extends React.Component {
                 <NavLink tag={RRNavLink} to='/home' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-home"></i> Home
                 </NavLink>
-                <NavLink tag={RRNavLink} to={`/achievements?Id=${this.state.currentUser}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
+                <NavLink tag={RRNavLink} to={`/achievements?Id=${this.props.currentUser}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-trophy"></i> My Achievements 
                 </NavLink>
 
@@ -150,7 +149,7 @@ class navbarC extends React.Component {
                 {this.props.moderator ? <NavLink tag={RRNavLink} to='/mods' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-home"></i> Moderator Portal
                 </NavLink> : null}
-                {this.props.loggedIn ? <p onClick={this.logoutClicked} className='nav-link'
+                {this.props.currentUser ? <p onClick={this.logoutClicked} className='nav-link'
                   onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
                   <i className="fas fa-sign-out-alt"></i> Logout
                 </p> 

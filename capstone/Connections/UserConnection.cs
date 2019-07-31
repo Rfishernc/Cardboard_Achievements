@@ -169,5 +169,38 @@ namespace capstone.Connections
             }
             throw new Exception("Could not clear notification");
         }
+
+        public int GetUserId(string uid)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Id
+                                    From [User]
+                                    Where [User].Uid = @Uid";
+                var id = connection.QueryFirstOrDefault<int>(queryString, new { uid });
+                if (id > 0)
+                {
+                    return id;
+                }
+            }
+            throw new Exception("Could not get user Id");
+        }
+
+        public User AddUserInDB(NewUserRequest request)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                request.JoinDate = DateTime.Now;
+                var queryString = @"Insert into [User](Username, Uid, JoinDate, Points, IsModerator, IsCertified, ProfilePic)
+                                    Output inserted.*
+                                    Values(@Username, @Uid, @JoinDate, 0, 0, 0, 'placeholder')";
+                var user = connection.QueryFirstOrDefault<User>(queryString, request);
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+            throw new Exception("Could not add user");
+        }
     }
 }

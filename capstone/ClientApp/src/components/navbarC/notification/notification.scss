@@ -2,14 +2,24 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
-  border: 1.5px solid black;
+  border: 1.5px solid white;
   padding: 5px;
   border-radius: 3px;
   margin-bottom: 5px;
-  background-color: darkgray;
+  background-color: rgba(131, 81, 25, 0.5);
+  color: white;
 }
 
 .notificationInfoContainer {
   display: flex;
   flex-flow: column;
+  color: white;
+}
+
+.popover-inner {
+  background-color: rgba(109, 76, 28, 0.815) !important;
+}
+
+.notificationMsg {
+  color: white;
 }

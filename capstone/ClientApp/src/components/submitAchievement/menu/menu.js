@@ -36,7 +36,7 @@ class menu extends React.Component {
     return(
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className='menu'>
         <DropdownToggle caret>
-          {this.state.selection}
+          {this.props.currentAchievement === '' ? 'Select An Achievement' : this.state.selection}
         </DropdownToggle>
         <DropdownMenu>
           {this.menuBuilder()}

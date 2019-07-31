@@ -23,8 +23,25 @@ axios.interceptors.response.use(response => {
    console.error("Blew up")
 });
 
-const createUser = (email, password) => new Promise((resolve, reject) => {
+const createUser = (email, password, username) => new Promise((resolve, reject) => {
   firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((data) => {
+      createUserInDB(username, data.user.uid)
+        .then(() => {
+          resolve();
+        });
+    })
+    .catch((err) => {
+      reject(err);
+    });
+});
+
+const createUserInDB = (UserName, Uid) => new Promise((resolve, reject) => {
+  const newUser = {
+    UserName,
+    Uid
+  }
+  axios.post(`${DBURL}/user`, newUser)
     .then(() => {
       resolve();
     })
@@ -32,14 +49,6 @@ const createUser = (email, password) => new Promise((resolve, reject) => {
       reject(err);
     });
 });
-
-const createUserInDB = (UserName, Uid) => {
-  const newUser = {
-    UserName,
-    Uid
-  }
-  axios.post(`${DBURL}/user`, newUser);
-}
 
 export default {
   createUser,

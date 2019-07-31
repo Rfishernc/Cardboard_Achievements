@@ -17,7 +17,6 @@ class gamesList extends React.Component {
     card: true,
     list: false,
     sort: 'name',
-    currentUser: 2
   }
 
   componentDidMount() {
@@ -49,7 +48,7 @@ class gamesList extends React.Component {
     } 
     
     else {
-      if (this.state.currentUser !== this.state.selectedUser) {
+      if (this.props.currentUser !== this.state.selectedUser) {
         userData.getUserForSearchResult(this.state.selectedUser)
           .then((userInfo) => {
             this.setState({ userInfo });
@@ -247,7 +246,7 @@ class gamesList extends React.Component {
             </div>
           </div>
         </div>
-        <div className='infoContainer col-10'>
+        <div className='infoContainer col-9'>
           {this.state.selectedUser !== 'all' ? this.userInfoBuilder() : null}
           <div className='gameListingContainer'>
             {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}

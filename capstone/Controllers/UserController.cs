@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using capstone.Connections;
+using capstone.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,11 +55,25 @@ namespace capstone.Controllers
             return Accepted(user);
         }
 
+        [HttpGet("uid/{uid}")]
+        public ActionResult GetUserId(string uid)
+        {
+            var userId = _connection.GetUserId(uid);
+            return Accepted(userId);
+        }
+
         [HttpPut("notified/{notificationId}")]
         public ActionResult ClearNotification(int notificationId)
         {
             var notification = _connection.ClearNotification(notificationId);
             return Accepted(notification);
+        }
+
+        [HttpPost]
+        public ActionResult AddUserInDB(NewUserRequest request)
+        {
+            var user = _connection.AddUserInDB(request);
+            return Accepted(request);
         }
 
     }

@@ -14,7 +14,6 @@ class home extends React.Component {
     achievementsInfo: null,
     userInfo: null,
     votingInfo : null,
-    currentUser: 2
   }
 
   componentDidMount() {
@@ -22,19 +21,19 @@ class home extends React.Component {
       .then((blogInfo) => {
         this.setState({ blogInfo });
       });
-    achievementData.getRecentAchievements(this.state.currentUser)
-      .then((achievementsInfo) => {
-        this.setState({ achievementsInfo });
-      });
-    if (this.state.currentUser !== null) {
-      userData.getUserOverview(this.state.currentUser)
+    if (this.props.currentUser !== null && this.props.currentUser !== undefined) {
+      userData.getUserOverview(this.props.currentUser)
       .then((userInfo) => {
         this.setState({ userInfo });
       });
-      achievementData.getRecentProposedAchievements(this.state.currentUser)
+      achievementData.getRecentProposedAchievements(this.props.currentUser)
         .then((votingInfo) => {
           this.setState({ votingInfo });
         });
+      achievementData.getRecentAchievements(this.props.currentUser)
+      .then((achievementsInfo) => {
+        this.setState({ achievementsInfo });
+      });
     }  
   }
 
@@ -56,7 +55,7 @@ class home extends React.Component {
         renderArray.push(<Achievement name={achievement.achievementName} image={achievement.image} description={achievement.description} 
           difficulty={achievement.difficulty} dateAdded={achievement.dateAdded} gameName={achievement.gameName} gameId={achievement.gameId}
           historyPusher={this.achievementHistoryPusher} hovered={this.hovered} hoveredOut={this.hoveredOut}
-          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.state.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
+          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.props.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
       });
     }
     return renderArray;
@@ -91,7 +90,7 @@ class home extends React.Component {
         <div className='container-fluid'>
           <div className='row homelow'>
             <div className='col-3'>
-              <Voting achievements={this.state.votingInfo} userId={this.state.currentUser}/>
+              <Voting achievements={this.state.votingInfo} userId={this.props.currentUser}/>
             </div>
             <div className='col-5 blogCol'>
               {this.blogBuilder()}

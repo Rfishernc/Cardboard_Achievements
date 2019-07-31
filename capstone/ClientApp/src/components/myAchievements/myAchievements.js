@@ -7,14 +7,13 @@ import './myAchievements.scss';
 
 class myAchievements extends React.Component {
   state = {
-    userId: window.location.href.slice(window.location.href.search('=') + 1),
     achievementsInfo: null,
     gamesInfo: null,
     isUser: true
   }
 
   componentDidMount() {
-    achievementData.getUsersAchievements(this.state.userId)
+    achievementData.getUsersAchievements(this.props.currentUser)
       .then((achievementsInfo) => {
         this.setState({ achievementsInfo });
       });
