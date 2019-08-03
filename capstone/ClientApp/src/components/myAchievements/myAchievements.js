@@ -9,23 +9,20 @@ class myAchievements extends React.Component {
   state = {
     achievementsInfo: null,
     gamesInfo: null,
-    isUser: true
+    isUser: true,
   }
 
   componentDidMount() {
-    achievementData.getUsersAchievements(this.props.currentUser)
-      .then((achievementsInfo) => {
-        this.setState({ achievementsInfo });
-      });
-    gameData.getUsersGames(this.state.userId)
-      .then((gamesInfo) => {
-        this.setState({ gamesInfo });
-      });
+    this.checkUserState();
+  }
+
+  componentDidUpdate() {
+    this.checkUserState();
   }
 
   recentAchievementsBuilder = () => {
+    let renderArray = [];
     if (this.state.achievementsInfo !== null) {
-      let renderArray = [];
       
       Object.keys(this.state.achievementsInfo).forEach((game) => {
         this.state.achievementsInfo[game].forEach((achievement) => {
@@ -46,13 +43,13 @@ class myAchievements extends React.Component {
       if (renderArray.length > 5) {
         renderArray = renderArray.slice(0, 5);
       }
-      return renderArray;
     }
+    return renderArray;
   }
 
   gamesCardBuilder = () => {
+    let renderArray = [];
     if (this.state.gamesInfo !== null) {
-      let renderArray = [];
       Object.keys(this.state.gamesInfo).forEach((gameId) => {
         const game = this.state.gamesInfo[gameId];
         let points = 0;
@@ -70,8 +67,8 @@ class myAchievements extends React.Component {
         </div>
       </div>)
       });
-      return renderArray;
     }
+    return renderArray;
   }
 
   historyPusher = (event) => {
@@ -93,6 +90,30 @@ class myAchievements extends React.Component {
     const link = event.currentTarget;
     if (link.className.includes(' hovered')) {
       link.className = link.className.replace(' hovered', '');
+    }
+  }
+
+  checkUserState = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          gameData.getUsersGames(this.props.currentUser)
+          .then((gamesInfo) => {
+            achievementData.getUsersAchievements(this.props.currentUser)
+            .then((achievementsInfo) => {
+              this.setState({ achievementsInfo, gamesInfo });
+            });
+          });
+        });
+      }
+    }
+    else {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
     }
   }
 

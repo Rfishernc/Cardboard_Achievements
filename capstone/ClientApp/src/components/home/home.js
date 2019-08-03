@@ -22,19 +22,12 @@ class home extends React.Component {
         this.setState({ blogInfo });
       });
     if (this.props.currentUser !== null && this.props.currentUser !== undefined) {
-      userData.getUserOverview(this.props.currentUser)
-      .then((userInfo) => {
-        this.setState({ userInfo });
-      });
-      achievementData.getRecentProposedAchievements(this.props.currentUser)
-        .then((votingInfo) => {
-          this.setState({ votingInfo });
-        });
-      achievementData.getRecentAchievements(this.props.currentUser)
-      .then((achievementsInfo) => {
-        this.setState({ achievementsInfo });
-      });
+      
     }  
+  }
+
+  componentDidUpdate() {
+    this.checkUserState();
   }
 
   blogBuilder = () => {
@@ -49,16 +42,29 @@ class home extends React.Component {
   }
 
   achievementsBuilder = () => {
-    const renderArray = [];
     if (this.state.achievementsInfo !== null) {
+      const renderArray = [];
       this.state.achievementsInfo.forEach((achievement) => {
         renderArray.push(<Achievement name={achievement.achievementName} image={achievement.image} description={achievement.description} 
           difficulty={achievement.difficulty} dateAdded={achievement.dateAdded} gameName={achievement.gameName} gameId={achievement.gameId}
           historyPusher={this.achievementHistoryPusher} hovered={this.hovered} hoveredOut={this.hoveredOut}
           key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.props.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
       });
-    }
     return renderArray;
+    }
+  }
+
+  votingBuilder = () => {
+    if (this.state.currentUser) {
+      if (this.state.votingInfo !== null) {
+        return <Voting achievements={this.state.votingInfo} userId={this.state.currentUser}/>;
+      }
+    }
+    else {
+      if (this.state.votingInfo !== null) {
+        return <Voting achievements={this.state.votingInfo}/>;
+      }
+    }
   }
   
   achievementHistoryPusher = (event) => {
@@ -83,14 +89,53 @@ class home extends React.Component {
     }
   }
 
+  checkUserState = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          userData.getUserOverview(this.state.currentUser)
+          .then((userInfo) => {
+            achievementData.getRecentProposedAchievements(this.state.currentUser)
+              .then((votingInfo) => {
+                achievementData.getRecentAchievements(this.state.currentUser) 
+                .then((achievementsInfo) => {
+                  this.setState({ userInfo, achievementsInfo, votingInfo });
+                })
+              });
+          });
+        });
+      }
+    }
+    else 
+    {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
+      achievementData.getRecentProposedAchievementsNoUser()
+        .then((votingInfo) => {
+          achievementData.getRecentAchievements(0)
+            .then((achievementsInfo) => {
+              if (JSON.stringify(this.state.votingInfo) !== JSON.stringify(votingInfo) || JSON.stringify(this.state.achievementsInfo) !== JSON.stringify(achievementsInfo)) {
+                this.setState({ votingInfo, achievementsInfo });
+              }
+            });
+        });
+    }
+  }
+
   render() {
+  
+
     return(
       <div className='home'>
-        {this.state.userInfo ? <UserOverview info={this.state.userInfo}/> : null}
+        {this.state.userInfo && this.state.currentUser ? <UserOverview info={this.state.userInfo}/> : null}
         <div className='container-fluid'>
           <div className='row homelow'>
             <div className='col-3'>
-              <Voting achievements={this.state.votingInfo} userId={this.props.currentUser}/>
+              {this.votingBuilder()}
             </div>
             <div className='col-5 blogCol'>
               {this.blogBuilder()}

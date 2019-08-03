@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace capstone.Models
 {
-    public class NewUserRequest
+    public class ChangeImageRequest
     {
-        public string Uid { get; set; }
-        public string Username { get; set; }
-        public DateTime JoinDate { get; set; }
+        public int Id { get; set; }
         public string ProfilePic { get; set; }
     }
 }

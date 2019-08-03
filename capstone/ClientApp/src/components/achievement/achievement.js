@@ -5,11 +5,18 @@ import './achievement.scss';
 
 class achievement extends React.Component {
   state = {
-    voteStatus: 'approved'
+    voteStatus: 'approved',
+    justVoted: false,
   }
 
   componentDidMount() {
     this.setState({ voteStatus: this.props.voteStatus });
+  }
+
+  componentDidUpdate() {
+    if (this.state.voteStatus !== this.props.voteStatus && this.state.justVoted === false) {
+      this.setState({ voteStatus: this.props.voteStatus });
+    }
   }
 
   difficultyConverter = () => {
@@ -24,7 +31,7 @@ class achievement extends React.Component {
   voteForAchievement = () => {
     voteData.addVote(this.props.userId, this.props.achievementId)
       .then(() => {
-        this.setState({ voteStatus: 'voted' });
+        this.setState({ justVoted: true, voteStatus: 'voted' });
       });
   }
 
@@ -53,7 +60,7 @@ class achievement extends React.Component {
           <p className='achievementInfoUnit'>Difficulty: {this.difficultyConverter()}</p>
           <p className='achievementInfoUnit'>{this.props.description}</p>
         </div>
-        <div className='achievementStatusContainer achievementContainer col-1'>
+        <div className='achievementStatusContainer col-1'>
           {this.props.completed ? <p>{this.props.completed}</p> : null}
         </div>
       </div>

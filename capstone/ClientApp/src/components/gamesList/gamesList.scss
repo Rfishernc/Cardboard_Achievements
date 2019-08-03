@@ -4,11 +4,13 @@
   background-image: url('../../images/pieces.jpg');
   background-size: cover;
   background-attachment: fixed;
+  min-height: 92vh;
 }
 
 .gameCard {
   margin-right: 50px;
   margin-top: 50px;
+  margin-bottom: 20px;
 }
 
 .gameImg {
@@ -18,10 +20,12 @@
 .searchAndSort {
   margin-right: 25px;
   border-right: 1.5px solid black;
-  border-top: 1.5px solid black;
   margin-top: 0;
   padding: 10px;
   background-color: white;
+  // position: relative;
+  // top: 0;
+  // left: 0;
 }
 
 .form-check-input {

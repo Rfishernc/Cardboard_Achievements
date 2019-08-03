@@ -2,3 +2,18 @@
   margin-top: 10px;
   margin-right: 5px;
 }
+
+.searchBarContainer {
+  display: flex;
+  flex-flow: column;
+}
+
+.searchMenu {
+  padding-top: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+}
+
+.dropdown {
+  height: 1px !important;
+}

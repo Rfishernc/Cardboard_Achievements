@@ -39,7 +39,9 @@ class login extends React.Component {
   registerUser = () => {
     registerData.createUser(this.state.email, this.state.password, this.state.username)
       .then(() => {
-        
+        this.setState({ email: '', password: '', username: '' }, () => {
+          this.toggle();
+        });
       });
   }
 
@@ -118,6 +120,7 @@ class login extends React.Component {
                   <input type="password" className="form-control" id="passwordInputLogin" placeholder="Enter password" onChange={this.updateField}/>
                 </div>
               </form>
+              <Button onClick={this.loginUser}>Login</Button>
               <p className='registerLink' onClick={this.goToRegister}>Register a new account</p>
             </div>             
             : 

@@ -48,12 +48,6 @@ class gamesList extends React.Component {
     } 
     
     else {
-      if (this.props.currentUser !== this.state.selectedUser) {
-        userData.getUserForSearchResult(this.state.selectedUser)
-          .then((userInfo) => {
-            this.setState({ userInfo });
-          });
-      }
       gameData.getUsersGames(this.state.selectedUser)
         .then((gamesInfo) => {
           this.setState({ gamesInfo }, () => {
@@ -79,6 +73,10 @@ class gamesList extends React.Component {
           });
         });
     }
+  }
+
+  componentDidUpdate() {
+    this.checkUserState();
   }
 
   gamesCardBuilder = () => {
@@ -213,6 +211,34 @@ class gamesList extends React.Component {
     }
   }
 
+  checkUserState = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else if (this.props.currentUser !== parseInt(this.state.selectedUser, 10) && this.state.selectedUser !== 'all') {
+        userData.getUserForSearchResult(this.state.selectedUser)
+          .then((userInfo) => {
+            this.setState({ userInfo, currentUser: this.props.currentUser });
+          });
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser });
+      }
+    }
+    else {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
+      if (this.state.selectedUser !== 'all') {
+        userData.getUserForSearchResult(this.state.selectedUser)
+          .then((userInfo) => {
+            this.setState({ userInfo });
+          });
+      }
+    }
+  }
+
   render() {
     return(
       <div className='gamesList container-fluid'>
@@ -247,7 +273,7 @@ class gamesList extends React.Component {
           </div>
         </div>
         <div className='infoContainer col-9'>
-          {this.state.selectedUser !== 'all' ? this.userInfoBuilder() : null}
+          {this.state.selectedUser !== 'all' && this.state.currentUser != this.state.selectedUser ? this.userInfoBuilder() : null}
           <div className='gameListingContainer'>
             {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}
           </div>

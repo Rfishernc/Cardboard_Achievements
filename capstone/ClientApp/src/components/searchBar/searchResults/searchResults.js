@@ -134,14 +134,14 @@ class searchResults extends React.Component {
     return(
       <div className='searchResults'>
         {this.state.popOverInfo ? this.state.popOverInfo : null}
-        <Dropdown isOpen={true} toggle={this.toggle}>
+        <Dropdown isOpen={!this.props.closed}>
           <DropdownToggle caret className='dropdownBeGone'>
           </DropdownToggle>
-          <DropdownMenu className={this.classMaker()}>
+          {!this.props.closed ? <DropdownMenu className={this.classMaker()}>
             {this.props.games ? this.searchBuilder('game') : null}
             {this.props.achievements ? this.searchBuilder('achievement') : null}
             {this.props.users ? this.searchBuilder('user') : null}
-          </DropdownMenu>
+          </DropdownMenu> : null}
         </Dropdown>
       </div>
     );

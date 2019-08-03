@@ -70,6 +70,13 @@ namespace capstone.Controllers
             return Accepted(achievements);
         }
 
+        [HttpGet("proposed&recent")]
+        public ActionResult GetRecentProposedAchievementsNoUser()
+        {
+            var achievements = _connection.GetRecentProposedAchievements();
+            return Accepted(achievements);
+        }
+
         [HttpGet("proposed/{gameId}/{userId}")]
         public ActionResult GetProposedAchievementsForGame(int gameId, int userId)
         {
@@ -83,6 +90,13 @@ namespace capstone.Controllers
         {
             var achievement = _connection.GetAchievementForSearchResult(achievementId);
             return Accepted(achievement);
+        }
+
+        [HttpGet("search/detail")]
+        public ActionResult GetSearchedAchievements([FromQuery(Name = "names")] string[] names)
+        {
+            var games = _connection.GetSearchedAchievements(names);
+            return Accepted(games);
         }
 
         [HttpPost]

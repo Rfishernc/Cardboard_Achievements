@@ -70,6 +70,23 @@ namespace capstone.Connections
             throw new Exception("Failed to get game details.");
         }
 
+        public IEnumerable<GameAchievement> GetGameDetailsNoUser(int gameId)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Game.Id as GameId, Achievement.Id as AchievementId, Game.Name as GameName,
+                                        Game.Link, Achievement.Difficulty, Game.Image as GameImage, Achievement.Image as AchievementImage, 
+                                        Achievement.Difficulty, Achievement.Description, Achievement.DateAdded, Achievement.Name as AchievementName
+                                    From Game
+                                    Join Achievement ON Achievement.GameId = Game.Id
+                                    Where Game.Id = @GameId AND Achievement.IsApproved = 1";
+                var gameAchievements = connection.Query<GameAchievement>(queryString, new { gameId });
+
+                return gameAchievements;
+            }
+            throw new Exception("Failed to get game details.");
+        }
+
         public int GetNumberOfPlayers(int gameId)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -150,6 +167,55 @@ namespace capstone.Connections
                 return returnGame;
             }
             throw new Exception("Could not get game");
+        }
+
+        public IEnumerable<Game> GetSearchedGames(string[] names)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+
+                var countString = @"Select Count(*) as AchievementCount, Game.Id
+                                    From Game
+                                    Join Achievement on Achievement.GameId = Game.Id AND Achievement.IsApproved = 1
+                                    Where Game.Name In @Names
+                                    Group by Game.Id";
+                var achievementCounts = connection.Query<Game>(countString, new { names });
+
+                var queryString = @"Select *
+                                    From Game
+                                    Where Game.Name In @Names";
+                var games = connection.Query<Game>(queryString, new { names });
+                foreach (Game game in games)
+                {
+                    foreach (Game aCount in achievementCounts)
+                    {
+                        if (aCount.Id == game.Id)
+                        {
+                            game.AchievementCount = aCount.AchievementCount;
+                        }
+                    }
+                }
+
+                return games;
+            }
+            throw new Exception("Could not get users");
+        }
+
+        public UserGame AddGameToUser(SqlConnection connection, int userAchievementId)
+        {
+            var uAQueryString = @"Select Achievement.GameId, UserAchievement.UserId
+                                  From UserAchievement
+                                  Join Achievement on Achievement.Id = UserAchievement.AchievementId
+                                  Where UserAchievement.Id = @UserAchievementId";
+            var userAchievement = connection.QueryFirstOrDefault<UserAchievement>(uAQueryString, new { userAchievementId });
+            var userId = userAchievement.UserId;
+            var gameId = userAchievement.GameId;
+
+            var queryString = @"Insert into UserGame(UserId, GameId)
+                                Output inserted.*
+                                Values(@UserId, @GameId)";
+            var userGame = connection.QueryFirstOrDefault<UserGame>(queryString, new { userId, gameId });
+            return userGame;
         }
     }
 }

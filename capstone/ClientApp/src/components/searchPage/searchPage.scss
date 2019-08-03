@@ -1,0 +1,62 @@
+.result {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  background-color: rgba(131, 81, 25, 0.5);
+  border: 1.5px solid rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+  width: 500px;
+}
+
+.searchPageContainer {
+  margin-left: 30px;
+}
+
+.searchPageContainerA {
+  margin-left: 30px;
+}
+
+.searchPageContainerA > div {
+  width: 500px;
+}
+
+.resultUnit {
+  padding: 15px;
+  margin-left: 10px;
+  color: black !important;
+}
+
+.joinDate {
+  margin-top: 10px;
+  font-size: 0.75em;
+  padding-left: 15px;
+  color: black !important;
+}
+
+.searchPageTitle {
+  font-size: 1.25em;
+  margin-top: 15px;
+}
+
+.searchPageTitleA {
+  font-size: 1.25em;
+  margin-top: 15px;
+  margin-left: -15px;
+}
+
+.resultUnitContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.searchMain {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.searchMainTitle {
+  text-align: center;
+  font-size: 1.4em;
+}

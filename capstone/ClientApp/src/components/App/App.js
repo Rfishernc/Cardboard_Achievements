@@ -7,6 +7,7 @@ import GamesList from '../gamesList/gamesList';
 import GameDetail from '../gameDetail/gameDetail';
 import ModeratorPortal from '../moderatorPortal/moderatorPortal';
 import VotingPage from '../voting/votingPage/votingPage';
+import SearchPage from '../searchPage/searchPage';
 import connection from '../../data/connection';
 import firebase from 'firebase/app';
 import {
@@ -34,7 +35,8 @@ const RouteMe = ({ component: Component, currentUser, ...rest }) => {
     loginStatus: false,
     pendingUser: true,
     currentPath: window.location.pathname,
-    currentUser: null
+    currentUser: null,
+    isModerator: false,
   }
 
   componentDidMount() {
@@ -42,9 +44,10 @@ const RouteMe = ({ component: Component, currentUser, ...rest }) => {
       if (user) {
         profileCalls.currentUserInfo(user.uid)
         .then(profileInfo => {
-          const content = profileInfo.data
+          const content = profileInfo.data;
             this.setState({
-              currentUser: content,
+              currentUser: content.id,
+              isModerator: content.isModerator,
               loginStatus: true,
               pendingUser: false
             });
@@ -70,19 +73,20 @@ const RouteMe = ({ component: Component, currentUser, ...rest }) => {
 
     return (
         <BrowserRouter>
-          <NavbarC moderator={true}/>
+          <NavbarC moderator={this.state.isModerator} currentUser={this.state.currentUser}/>
           <React.Fragment>
-              <div className="switch-comp">
+              <div className="switch-comp page">
             <Switch>
               <RouteMe path='/home' exact component={Home} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
               <RouteMe path='/' exact component={Home} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
-              <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/gamers' component={Gamers} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/games+*' component={GamesList} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/achievements' component={MyAchievements} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/game' component={GameDetail} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/mods' component={ModeratorPortal} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
-              <Route path='/voting' component={VotingPage} currentPath={this.state.currentPath} loginStatus={this.state.loginStatus} currentUser={this.state.currentUser}/>
+              <RouteMe path='/gamers' component={Gamers} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/gamers' component={Gamers} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/games+*' component={GamesList} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/achievements' component={MyAchievements} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/game' component={GameDetail} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/mods' component={ModeratorPortal} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/voting' component={VotingPage} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
+              <RouteMe path='/search-results/:query' component={SearchPage} currentPath={this.state.currentPath} currentUser={this.state.currentUser}/>
             </Switch>
               </div>
           </React.Fragment>

@@ -24,3 +24,20 @@
 .overviewAchievement {
   margin-left: 20px;
 }
+
+.profileRight {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.picChange {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.picBtn {
+  margin-left: 5px;
+  margin-top: 5px;
+}

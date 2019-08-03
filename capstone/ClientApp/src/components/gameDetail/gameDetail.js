@@ -10,26 +10,22 @@ class gameDetail extends React.Component {
     gameInfo: null,
     playersInfo: null,
     achievementInfo: [],
+    gameId: window.location.href.slice(window.location.href.search('=') + 1)
   }
 
   componentDidMount() {
-    const gameId = window.location.href.slice(window.location.href.search('=') + 1);
-    gameData.getGameDetails(gameId, this.props.currentUser)
-      .then((gameInfo) => {
-        this.setState({ gameInfo });
-      });
-    achievementData.getUsersAchievementsForGame(this.props.currentUser, gameId)
-      .then((achievementInfo) => {
-        this.setState({ achievementInfo });
-      });
-    gameData.getNumberOfPlayers(gameId)
+    gameData.getNumberOfPlayers(this.state.gameId)
       .then((playersInfo) => {
         this.setState({ playersInfo });
       });
-    gameData.getGamePopularity(gameId)
+    gameData.getGamePopularity(this.state.gameId)
       .then((popularity) => {
         this.setState({ popularity });
       });
+  }
+
+  componentDidUpdate() {
+    this.checkUserStatus();
   }
 
   pointsTotalizer = (target) => {
@@ -62,8 +58,8 @@ class gameDetail extends React.Component {
         </div>
         <div className='detailsLinksContainer'>
           <a href={this.state.gameInfo[0].link} className='gameLink'>BoardgameGeek Page</a>
-          <Button className='btn btn-dark btn-sm' onClick={this.viewProposed}>
-            View Proposed Achievements For {this.state.gameInfo[0].gameName}</Button>
+          {this.props.currentUser ? <Button className='btn btn-dark btn-sm' onClick={this.viewProposed}>
+            View Proposed Achievements For {this.state.gameInfo[0].gameName}</Button> : null}
         </div>
       </div>
     }
@@ -78,6 +74,38 @@ class gameDetail extends React.Component {
           completed={this.props.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null} voteStatus='approved'/>);
       });
       return renderArray;
+    }
+  }
+
+  checkUserStatus = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          gameData.getGameDetails(this.state.gameId, this.state.currentUser)
+          .then((gameInfo) => {
+            achievementData.getUsersAchievementsForGame(this.props.currentUser, this.state.gameId)
+              .then((achievementInfo) => {
+                this.setState({ achievementInfo, gameInfo });
+              });
+          });
+        });
+      }
+    }
+    else {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null, achievementInfo: [] });
+      }
+      else {
+        gameData.getGameDetailsNoUser(this.state.gameId)
+        .then((gameInfo) => {
+          if (JSON.stringify(this.state.gameInfo) !== JSON.stringify(gameInfo)) {
+            this.setState({ gameInfo });
+          }
+        });
+      }  
     }
   }
 

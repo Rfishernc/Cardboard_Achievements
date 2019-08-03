@@ -111,6 +111,10 @@ class proposeAchievement extends React.Component {
                 <label htmlFor="descriptionInput">Description</label>
                 <input type="text" className="form-control" id="descriptionInput" placeholder="Enter achievement description" onChange={this.select}/>
               </div>
+              <div className="form-group">
+                <label htmlFor="imageInput">Image Link</label>
+                <input type="text" className="form-control" id="imageInput" placeholder="Enter icon link" onChange={this.select}/>
+              </div>
               <div className='difficultyContainer'>
                 <p className='difficultyTitle'>Difficulty: </p>
                 <div className='form-check form-check-inline'>

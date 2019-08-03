@@ -55,10 +55,17 @@ namespace capstone.Controllers
             return Accepted(user);
         }
 
-        [HttpGet("uid/{uid}")]
-        public ActionResult GetUserId(string uid)
+        [HttpGet("search/detail")]
+        public ActionResult GetSearchedUsers([FromQuery(Name = "names")] string[] names)
         {
-            var userId = _connection.GetUserId(uid);
+            var games = _connection.GetSearchedUsers(names);
+            return Accepted(games);
+        }
+
+        [HttpGet("uid/{uid}")]
+        public ActionResult GetUserInfo(string uid)
+        {
+            var userId = _connection.GetUserInfo(uid);
             return Accepted(userId);
         }
 
@@ -76,5 +83,11 @@ namespace capstone.Controllers
             return Accepted(request);
         }
 
+        [HttpPut("pic")]
+        public ActionResult ChangeImage(ChangeImageRequest request)
+        {
+            var imgUpdate = _connection.ChangeImage(request);
+            return Accepted(imgUpdate);
+        }
     }
 }
