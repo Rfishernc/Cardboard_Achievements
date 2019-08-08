@@ -231,11 +231,12 @@ namespace capstone.Connections
                         Name = proposedAchievementRequest.Name,
                         Description = proposedAchievementRequest.Description,
                         Image = proposedAchievementRequest.Image,
-                        DateSubmitted = DateTime.Now
+                        DateSubmitted = DateTime.Now,
+                        Difficulty = proposedAchievementRequest.Difficulty
                     };
-                    var queryString = @"Insert into Achievement(GameId, Name, Description, Image, DateSubmitted, IsPending, IsApproved, VotingIsActive)
+                    var queryString = @"Insert into Achievement(GameId, Name, Description, Image, DateSubmitted, IsPending, IsApproved, VotingIsActive, Difficulty)
                                         Output inserted.*
-                                        Values(@GameId, @Name, @Description, @Image, @DateSubmitted, 1, 0, 1)";
+                                        Values(@GameId, @Name, @Description, @Image, @DateSubmitted, 1, 0, 1, @Difficulty)";
                     var achievement = connection.QueryFirstOrDefault<NewAchievement>(queryString, newAchievement);
                     return achievement;
             }

@@ -3,6 +3,7 @@ import achievementData from '../../data/achievementData';
 import gameData from '../../data/gameData';
 import Achievement from '../achievement/achievement';
 import SubmitAchievement from '../submitAchievement/submitAchievement';
+import { Progress } from 'reactstrap';
 import './myAchievements.scss';
 
 class myAchievements extends React.Component {
@@ -64,6 +65,7 @@ class myAchievements extends React.Component {
           <h5 className="card-title">{game[0].gameName}</h5>
           <p className="card-text">{game.length} Achievements</p>
           <p className="card-text">{points} Total Points</p>
+          <Progress value={(game[0].userPoints / points) * 100} color='warning'>{((game[0].userPoints / points) * 100).toFixed(1)}%</Progress>
         </div>
       </div>)
       });
@@ -120,7 +122,7 @@ class myAchievements extends React.Component {
   render() {
     return(
       <div className='myAchievements'>
-        <div className="container-fluid">
+        <div className="container-fluid fluidachieve">
           <div className="row achievementsUpper">
             <div className="col-9 recentAchievements">
               <div className='titleContainer'>
@@ -131,7 +133,7 @@ class myAchievements extends React.Component {
               </div>
             </div>
             {this.state.isUser ? <div className="col-3 submitAchievementContainer">
-              <SubmitAchievement userId={this.state.userId}/>
+              <SubmitAchievement currentUser={this.props.currentUser}/>
             </div> : null}
           </div>
           <div className='myAchievementsLower'>

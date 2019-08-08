@@ -13,7 +13,8 @@ class submitAchievement extends React.Component {
     gamesInfo: null,
     gameNames: null,
     link: '',
-    error: false
+    error: false,
+    submitted: false
   }
 
   componentDidMount() {
@@ -53,12 +54,12 @@ class submitAchievement extends React.Component {
     const newAchievement = {
       achievementId: this.state.achievement,
       link: this.state.link,
-      userId: this.props.userId
+      userId: this.props.currentUser
     }
     if (!this.state.error) {
       achievementData.submitAchievement(newAchievement)
       .then(() => {
-        this.setState({ link: '', game: '' });
+        this.setState({ link: '', game: '', submitted: true });
       });
     }
   }
@@ -110,6 +111,7 @@ class submitAchievement extends React.Component {
             <input type="text" className="form-control" id="linkInput" placeholder="Enter evidence link" onChange={this.selectLink}/>
           </div>
           <button type="submit" className="btn btn-primary" onClick={this.submitAchieve}>Submit</button>
+          {this.state.submitted ? <p>Your achievement has been successfully submitted</p> : null}
         </form>
       </div>
     );

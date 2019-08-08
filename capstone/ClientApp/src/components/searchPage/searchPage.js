@@ -155,7 +155,7 @@ class searchPage extends React.Component {
             }
           }
     //Renders a match if each character in sequence matches their corresponding character. If a game name has already been rendered, will not create a copy.
-          if (counter === splitWord.length && !searchResultIds.includes(searchType + dbName.Id) && counter > 0) {
+          if (counter === splitWord.length && !searchResultIds.includes(searchType + dbName.id) && counter > 0) {
               searchResultIds.push(searchType + dbName.Id);
                 results.push(dbName);
           }
@@ -170,7 +170,7 @@ class searchPage extends React.Component {
     const renderArray = [];
     if (this.state.gamesInfo !== null) {
       this.state.gamesInfo.forEach((game) => {
-        renderArray.push(<Link className='result' to={`/game?Id=${game.id}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
+        renderArray.push(<Link className='result' to={`/game?Id=${game.id}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut} key={`gameR${game.id}`}>
           <img src={game.image} className='profilePic resultUnit' alt=''/>
           <div>
             <p className='resultUnit'>{game.name}</p>
@@ -187,7 +187,7 @@ class searchPage extends React.Component {
     const renderArray = [];
     if (this.state.achievementsInfo !== null) {
       this.state.achievementsInfo.forEach((achievement) => {
-        renderArray.push(<Achievement name={achievement.achievementName} difficulty={achievement.difficulty}
+        renderArray.push(<Achievement name={achievement.achievementName} difficulty={achievement.difficulty} key={`achievementR${achievement.achievementId}`}
           description={achievement.description} dateAdded={achievement.dateAdded} gameName={achievement.gameName}
           hovered={this.hovered} hoveredOut={this.hoveredOut} historyPusher={this.historyPusher} gameId={achievement.gameId}/>);
       });
@@ -199,7 +199,7 @@ class searchPage extends React.Component {
     const renderArray = [];
     if (this.state.usersInfo !== null) {
       this.state.usersInfo.forEach((user) => {
-        renderArray.push(<Link className='result' to={`/games+${user.id}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
+        renderArray.push(<Link className='result' to={`/games+${user.id}`} onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut} key={`userR${user.id}`}>
            <div className='resultUnitContainer'>
             <img src={user.profilePic} className='profilePic resultUnit' alt=''/>
             <p className='joinDate'>{user.joinDate.replace('T00:00:00', '')}</p>  

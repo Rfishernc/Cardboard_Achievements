@@ -16,6 +16,7 @@
   padding-right: 0;
   padding-left: 0;
   height: 60px;
+  background-color: rgba(109, 76, 28, 1)!important;
 }
 
 .navTitle {
@@ -24,7 +25,7 @@
 }
 
 .hovered {
-  background-color: skyblue !important;
+  background-color: sienna !important;
   color: black !important;
 }
 
@@ -52,4 +53,9 @@
 #gameMenu {
   background-color: #343a40;
   color: white;
+}
+
+.logo {
+  width: 30px;
+  margin-right: 10px;
 }

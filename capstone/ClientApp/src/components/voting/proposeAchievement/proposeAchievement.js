@@ -76,15 +76,25 @@ class proposeAchievement extends React.Component {
 
   proposeAchieve = (event) => {
     event.preventDefault();
+    const convertDifficulty = (tar) => {
+      switch(tar) {
+        case 'easy' : return 1;
+        case 'normal' : return 2;
+        case 'hard' : return 3;
+        default: break;
+      }
+    }
+
     const newAchievement = {
       name: this.state.name,
-      gameId: this.state.game,
-      difficulty: this.state.difficulty,
+      gameId: parseInt(this.state.game.gameId, 10),
+      difficulty: convertDifficulty(this.state.difficulty),
       description: this.state.description,
       image: this.state.image
     }
     achievementData.addProposedAchievement(newAchievement)
       .then(() => {
+        this.props.refresh();
         this.toggle();
       });
   }

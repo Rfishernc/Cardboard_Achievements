@@ -28,8 +28,8 @@ class voting extends React.Component {
   render() {
     return(
       <div className='voting'>
-        <p className='votingTitle'>Vote for New Achievements</p>
-        {this.props.userId ? <ProposeAchievement userId={this.props.userId}/> : null}
+        <p className='votingTitle'>{this.props.userId ? 'Vote for New Achievements' : 'Log in to Vote on Achievements'}</p>
+        {this.props.userId ? <ProposeAchievement userId={this.props.userId} refresh={this.props.refresh}/> : null}
         {this.achievementsBuilder()}
       </div>
     );

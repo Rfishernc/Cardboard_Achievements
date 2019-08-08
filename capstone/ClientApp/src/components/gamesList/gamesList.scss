@@ -1,9 +1,6 @@
 .gamesList {
   display: flex;
   flex-flow: row wrap;
-  background-image: url('../../images/pieces.jpg');
-  background-size: cover;
-  background-attachment: fixed;
   min-height: 92vh;
 }
 
@@ -23,6 +20,7 @@
   margin-top: 0;
   padding: 10px;
   background-color: white;
+  margin-right: 0;
   // position: relative;
   // top: 0;
   // left: 0;
@@ -52,6 +50,8 @@
 .gameListingContainer {
   display: flex;
   flex-flow: row wrap;
+  margin-top: 20px;
+  justify-content: center;
 }
 
 .userInfoContainer {
@@ -89,4 +89,8 @@
 
 .gameListRow {
   width: 100%;
+}
+
+.listProgress {
+  width: 200px;
 }

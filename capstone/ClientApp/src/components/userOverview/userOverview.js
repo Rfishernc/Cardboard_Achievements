@@ -19,7 +19,10 @@ class userOverview extends React.Component {
   }
 
   submit = () => {
-    userData.changeImage(this.props.currentUser, this.state.image);
+    userData.changeImage(this.props.currentUser, this.state.image)
+      .then(() => {
+        this.props.refreshPic();
+      });
     this.setState({ changeImage: false });
   }
 
@@ -42,7 +45,7 @@ class userOverview extends React.Component {
               <div className='overviewContainer'>
                 <p className='userInfoUnit'>{this.props.info.username}</p>
                 <img src={this.props.info.profilePic} className='profilePic' alt=''/>
-                {!this.state.changeImage ? <Button className='btn btn-sm btn-link' onClick={this.changeProfilePic}>Change Picture</Button> : null}
+                <button className='btn btn-sm btn-link' onClick={this.changeProfilePic}>Change Picture</button>
               </div>
               <div className='profileRight'>
                 <p className='userInfoUnit points'>{this.props.info.points} Total Points Earned</p>

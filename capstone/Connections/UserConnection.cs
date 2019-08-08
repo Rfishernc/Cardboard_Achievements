@@ -32,9 +32,49 @@ namespace capstone.Connections
                 var games = connection.Query<GameAchievement>(queryString, new { userId });
                 var groupedAchievements = games.GroupBy(achievement => achievement.GameId);
                 var gamesWithAchieves = groupedAchievements.ToDictionary(x => x.Key, x => x.ToList());
+
+                var totals = GetUsersCompletions(connection, userId);
+                
+                foreach(KeyValuePair<int, List<GameAchievement>> gameGroup in gamesWithAchieves)
+                {
+                    foreach(Completions totalPoints in totals)
+                    {
+                        if (totalPoints.GameId == gameGroup.Key)
+                        {
+                            gameGroup.Value[0].UserPoints = totalPoints.UserPoints;
+                        }
+                    }
+                }
+
                 return gamesWithAchieves;
             }
             throw new Exception("Failed to return games list.");
+        }
+
+        public List<Completions> GetUsersCompletions (SqlConnection connection, int userId)
+        {
+            var queryString = @"Select Achievement.GameId, Achievement.Difficulty
+                                From UserAchievement
+                                Join Achievement on Achievement.Id = UserAchievement.AchievementId
+                                Where UserAchievement.UserId = @UserId AND UserAchievement.IsApproved = 1";
+            var completions = connection.Query<Completions>(queryString, new { userId });
+            foreach (Completions completion in completions)
+            {
+                completion.UserPoints = completion.Difficulty * 10;
+            }
+            var groupedCompletions = completions.GroupBy(x => x.GameId);
+            var totals = new List<Completions>();
+            foreach (IGrouping<int, Completions> gameGroup in groupedCompletions)
+            {
+                var gameId = gameGroup.Key;
+                var userPoints = 0;
+                foreach (Completions completion in gameGroup)
+                {
+                    userPoints += completion.UserPoints;
+                }
+                totals.Add(new Completions() { GameId = gameId, UserPoints = userPoints });
+            }
+            return totals;
         }
 
         public List<UserWithAchievements> GetGamers()
@@ -83,7 +123,7 @@ namespace capstone.Connections
                 var queryString = @"Select Top(1) [User].Username, [User].ProfilePic, [User].Points, Achievement.Image, Achievement.Name as AchievementName,
                                         Achievement.Description, Achievement.DateAdded, Achievement.Difficulty, Game.Id as GameId, Game.Name as GameName
                                     From [User]
-                                    Left Join UserAchievement on UserAchievement.UserId = [User].Id
+                                    Left Join UserAchievement on UserAchievement.UserId = [User].Id AND UserAchievement.IsApproved = 1
                                     Left Join Achievement on Achievement.Id = UserAchievement.AchievementId
                                     Left Join Game on Game.Id = Achievement.GameId
                                     Where [User].Id = @UserId
@@ -229,9 +269,10 @@ namespace capstone.Connections
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
-                var queryString = @"Update User
+                var queryString = @"Update [User]
                                         Set ProfilePic = @ProfilePic
-                                    Where User.Id = @Id";
+                                    Output inserted.Id
+                                    Where [User].Id = @Id";
                 var imgUpdate = connection.QueryFirst<int>(queryString, request);
                 return imgUpdate;
             }

@@ -154,8 +154,8 @@ namespace capstone.Connections
             {
                 var queryString = @"Select Game.Link, Game.Name, Game.Image
                                     From Game
-                                    Join Achievement on Achievement.GameId = Game.Id
-                                    Where Game.Id = @GameId AND Achievement.IsApproved = 1";
+                                    Left Join Achievement on Achievement.GameId = Game.Id AND Achievement.IsApproved = 1
+                                    Where Game.Id = @GameId";
                 var game = connection.Query<Game>(queryString, new { gameId });
                 var achievementCount = game.Count();
                 var returnGame = new Game() {

@@ -81,7 +81,7 @@ searchOpen = () => {
       <div className='searchBar'>
         <InputGroup>
           <div className='searchBarContainer'>
-            <Input className="input" type="text" placeholder="Search..." id='searchBar' value={this.state.searchText} onChange={this.searchText}/>
+            <Input className="input" type="text" placeholder="Search..." id='searchBar' value={this.state.searchText} onChange={this.searchText} autoComplete='off'/>
             {this.state.searchText === '' ? null
               :
               <SearchResults selection={this.selection} achievementNames={this.state.achievementNames} searchText={this.state.searchText}

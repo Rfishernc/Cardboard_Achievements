@@ -10,10 +10,34 @@ class gameDetail extends React.Component {
     gameInfo: null,
     playersInfo: null,
     achievementInfo: [],
-    gameId: window.location.href.slice(window.location.href.search('=') + 1)
+    gameId: null,
+    selectedUser: null
   }
 
   componentDidMount() {
+    if (window.location.href.search('&') > -1) {
+      this.setState({ 
+        gameId: window.location.href.slice(window.location.href.search('=') + 1, window.location.href.search('&')),
+        selectedUser: window.location.href.slice(window.location.href.search('&') + 6)
+      }, () => {
+        this.getDetails();
+      });
+    }
+    else {
+      this.setState({ 
+        gameId: window.location.href.slice(window.location.href.search('=') + 1),
+        selectedUser: null}, () => {
+          this.getDetails();
+        });
+    } 
+    
+  }
+
+  componentDidUpdate() {
+    this.checkUserStatus();
+  }
+
+  getDetails = () => {
     gameData.getNumberOfPlayers(this.state.gameId)
       .then((playersInfo) => {
         this.setState({ playersInfo });
@@ -22,10 +46,6 @@ class gameDetail extends React.Component {
       .then((popularity) => {
         this.setState({ popularity });
       });
-  }
-
-  componentDidUpdate() {
-    this.checkUserStatus();
   }
 
   pointsTotalizer = (target) => {
@@ -50,10 +70,10 @@ class gameDetail extends React.Component {
           <div className='gameInfo'>
             <p className='gameInfoUnit'>{this.state.gameInfo.length} Total Achievements</p>
             <p className='gameInfoUnit'>{this.pointsTotalizer(this.state.gameInfo)} Total Points</p>
-            <p className='gameInfoUnit'>{((this.state.achievementInfo.length / this.state.gameInfo.length) * 100).toFixed(1)} % Completed</p>
-            <p className='gameInfoUnit'>{this.pointsTotalizer(this.state.achievementInfo)} Out of {this.pointsTotalizer(this.state.gameInfo)} Points Earned</p>
             <p className='gameInfoUnit'>{this.state.playersInfo} Total Players</p>
             <p className='gameInfoUnit'>Popularity Ranking: #{this.state.popularity}</p>
+            {this.state.selectedUser ? <p className='gameInfoUnit'>{((this.state.achievementInfo.length / this.state.gameInfo.length) * 100).toFixed(1)} % Completed</p> : null}
+            {this.state.selectedUser ? <p className='gameInfoUnit'>{this.pointsTotalizer(this.state.achievementInfo)} Out of {this.pointsTotalizer(this.state.gameInfo)} Points Earned</p> : null}
           </div>
         </div>
         <div className='detailsLinksContainer'>
@@ -84,9 +104,14 @@ class gameDetail extends React.Component {
       }
       else {
         this.setState({ currentUser: this.props.currentUser }, () => {
-          gameData.getGameDetails(this.state.gameId, this.state.currentUser)
+
+          const whichUser = () => {
+            return this.state.selectedUser && this.state.selectedUser === this.state.currentUser ? this.state.selectedUser : this.state.currentUser;
+          }
+          console.log(whichUser());
+          gameData.getGameDetails(this.state.gameId, whichUser())
           .then((gameInfo) => {
-            achievementData.getUsersAchievementsForGame(this.props.currentUser, this.state.gameId)
+            achievementData.getUsersAchievementsForGame(whichUser(), this.state.gameId)
               .then((achievementInfo) => {
                 this.setState({ achievementInfo, gameInfo });
               });
@@ -99,12 +124,25 @@ class gameDetail extends React.Component {
         this.setState({ currentUser: null, achievementInfo: [] });
       }
       else {
-        gameData.getGameDetailsNoUser(this.state.gameId)
-        .then((gameInfo) => {
-          if (JSON.stringify(this.state.gameInfo) !== JSON.stringify(gameInfo)) {
-            this.setState({ gameInfo });
-          }
-        });
+        if (this.state.selectedUser !== null) {
+          gameData.getGameDetails(this.state.gameId, this.state.selectedUser)
+          .then((gameInfo) => {
+            achievementData.getUsersAchievementsForGame(this.state.selectedUser, this.state.gameId)
+              .then((achievementInfo) => {
+                if (JSON.stringify(this.state.gameInfo) !== JSON.stringify(gameInfo) || JSON.stringify(this.state.achievementInfo) !== JSON.stringify(achievementInfo)) {
+                  this.setState({ achievementInfo, gameInfo });
+                }
+              });
+          });
+        }
+        else {
+          gameData.getGameDetailsNoUser(this.state.gameId)
+          .then((gameInfo) => {
+            if (JSON.stringify(this.state.gameInfo) !== JSON.stringify(gameInfo)) {
+              this.setState({ gameInfo });
+            }
+          });
+        }     
       }  
     }
   }

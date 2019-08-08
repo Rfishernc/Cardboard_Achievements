@@ -57,12 +57,12 @@ class home extends React.Component {
   votingBuilder = () => {
     if (this.state.currentUser) {
       if (this.state.votingInfo !== null) {
-        return <Voting achievements={this.state.votingInfo} userId={this.state.currentUser}/>;
+        return <Voting achievements={this.state.votingInfo} userId={this.state.currentUser} refresh={this.refresh}/>;
       }
     }
     else {
       if (this.state.votingInfo !== null) {
-        return <Voting achievements={this.state.votingInfo}/>;
+        return <Voting achievements={this.state.votingInfo} refresh={this.refresh}/>;
       }
     }
   }
@@ -126,12 +126,25 @@ class home extends React.Component {
     }
   }
 
-  render() {
-  
+  refresh = () => {
+    achievementData.getRecentProposedAchievements(this.state.currentUser)
+      .then((votingInfo) => {
+        this.setState({ votingInfo });
+      });
+  }
 
+  refreshPic = () => {
+    userData.getUserOverview(this.state.currentUser)
+      .then((userInfo) => {
+        this.setState({ userInfo });
+      });
+  }
+
+  render() {
     return(
       <div className='home'>
-        {this.state.userInfo && this.state.currentUser ? <UserOverview info={this.state.userInfo}/> : null}
+        {this.state.userInfo && this.state.currentUser ? <UserOverview info={this.state.userInfo}
+          currentUser={this.props.currentUser} refreshPic={this.refreshPic}/> : null}
         <div className='container-fluid'>
           <div className='row homelow'>
             <div className='col-3'>

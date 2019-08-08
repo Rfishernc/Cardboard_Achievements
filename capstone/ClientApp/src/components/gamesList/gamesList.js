@@ -3,6 +3,7 @@ import gameData from '../../data/gameData';
 import achievementData from '../../data/achievementData';
 import userData from '../../data/userData';
 import SearchBar from '../searchBar/searchbar';
+import { Progress } from 'reactstrap';
 import './gamesList.scss';
 
 class gamesList extends React.Component {
@@ -98,6 +99,9 @@ class gamesList extends React.Component {
           <h5 className="card-title">{game[0].gameName}</h5>
           <p className="card-text">{game.length} Achievements</p>
           <p className="card-text">{points} Total Points</p>
+          {this.state.selectedUser !== 'all' ? 
+            <Progress value={(game[0].userPoints / points) * 100} color='warning'>{((game[0].userPoints / points) * 100).toFixed(1)}%</Progress>
+            : null}
         </div>
       </div>)
       });
@@ -124,6 +128,9 @@ class gamesList extends React.Component {
             <p className='listText'>{game[0].gameName}</p>
             <p className='listText'>{game.length} Achievements</p>
             <p className='listText'>{points} Total Points</p>
+            {this.state.selectedUser !== 'all' ? 
+            <Progress value={(game[0].userPoints / points) * 100} color='warning' className='listProgress'>{((game[0].userPoints / points) * 100).toFixed(1)}%</Progress>
+            : null}
         </li>);
       });
       return renderArray;
@@ -131,9 +138,26 @@ class gamesList extends React.Component {
   }
 
   historyPusher = (event) => {
-    const id = event.currentTarget.id;
-    const link = `/game?Id=${id}`;
-    this.props.history.push(link);
+    if (this.state.currentUser == this.state.selectedUser) {
+      const id = event.currentTarget.id;
+      const link = `/game?Id=${id}&user=${this.state.currentUser}`;
+      this.props.history.push(link);
+    }
+    else if (this.state.currentUser && this.state.selectedUser === 'all') {
+      const id = event.currentTarget.id;
+      const link = `/game?Id=${id}&user=${this.state.currentUser}`;
+      this.props.history.push(link);
+    }
+    else if (this.state.selectedUser !== 'all') {
+      const id = event.currentTarget.id;
+      const link = `/game?Id=${id}&user=${this.state.selectedUser}`;
+      this.props.history.push(link);
+    }
+    else {
+      const id = event.currentTarget.id;
+      const link = `/game?Id=${id}`;
+      this.props.history.push(link);
+    }
   }
 
   applySort = (sortingOrder) => {
@@ -272,7 +296,7 @@ class gamesList extends React.Component {
             </div>
           </div>
         </div>
-        <div className='infoContainer col-9'>
+        <div className='infoContainer col-10'>
           {this.state.selectedUser !== 'all' && this.state.currentUser != this.state.selectedUser ? this.userInfoBuilder() : null}
           <div className='gameListingContainer'>
             {this.state.card ? this.gamesCardBuilder() : <ul class="list-group">{this.gamesListBuilder()}</ul>}

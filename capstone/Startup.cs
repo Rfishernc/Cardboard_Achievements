@@ -109,6 +109,7 @@ namespace capstone
                 }
             });
 
+
             RecurringJob.AddOrUpdate("update-voting-statuses", (UpdateAchievements updater) => updater.UpdateVotingStates(), Cron.Daily);
             RecurringJob.AddOrUpdate("add-monthly-top-voted", (UpdateAchievements updater) => updater.UpdateMonthsAchievements(), Cron.Monthly);
 

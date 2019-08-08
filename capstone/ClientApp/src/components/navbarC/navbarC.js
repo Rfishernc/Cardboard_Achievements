@@ -15,6 +15,7 @@ import SearchBar from '../searchBar/searchbar';
 import Login from '../login/login';
 import Notification from './notification/notification';
 import userData from '../../data/userData';
+import meeple from '../../images/meeple.png'
 import './navbarC.scss';
 
 class navbarC extends React.Component {
@@ -115,6 +116,7 @@ class navbarC extends React.Component {
       <div className='navbarC'>
         <Navbar color="dark" dark expand="md">
           <NavbarBrand className='navTitle' href="/">
+            <img src={meeple} alt='' className='logo'/>
             Cardboard Achievements
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
@@ -138,7 +140,7 @@ class navbarC extends React.Component {
                     refresh={this.refresh} popoverOpen={this.state.popoverOpen}/> : null}
 
                 <NavLink tag={RRNavLink} to='/gamers' onMouseEnter={this.hovered} onMouseLeave={this.hoveredOut}>
-                  <i className="fas fa-user-friends"></i> Gamers
+                  <i className="fas fa-user-friends"></i> Leaderboards
                 </NavLink>
                 <div onMouseEnter={this.dropDown} onMouseLeave={this.dropDownOut} className={this.state.gameMenu ? 'nav-link hovered' : 'nav-link'} id='gameLink'>
                   <i className="fas fa-dice"></i> View Games

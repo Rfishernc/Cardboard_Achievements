@@ -5,7 +5,6 @@ import {
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import registerData from '../../data/registerData';
-import profileCalls from '../../data/profileCalls';
 import './login.scss';
 
 class login extends React.Component {
@@ -89,7 +88,7 @@ class login extends React.Component {
   }
 
   goToRegister = () => {
-    this.setState({ loggingIn: false });
+    this.setState({ loggingIn: false, email: '', password: '', username: '' });
   }
 
   render() {
@@ -100,7 +99,7 @@ class login extends React.Component {
                   <i className="fas fa-sign-in-alt"></i> Login
         </p> 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader className='loginM' toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle}>
             {this.state.loggingIn ? 'Login to Cardboard Achievements' : 'Register a new account'}
           </ModalHeader>
           <ModalBody className='loginM'>
@@ -109,34 +108,36 @@ class login extends React.Component {
               <form>
                 <div className="form-group">
                   <label htmlFor="usernameInputLogin">Username</label>
-                  <input type="email" className="form-control" id="usernameInputLogin" placeholder="Enter username" onChange={this.updateField}/>
+                  <input type="email" className="form-control" id="usernameInputLogin" placeholder="Enter username" onChange={this.updateField} value={this.state.username}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="emailInputLogin">Email</label>
-                  <input type="email" className="form-control" id="emailInputLogin" placeholder="Enter email" onChange={this.updateField}/>
+                  <input type="email" className="form-control" id="emailInputLogin" placeholder="Enter email" onChange={this.updateField} value={this.state.email}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="passwordInputLogin">Password</label>
-                  <input type="password" className="form-control" id="passwordInputLogin" placeholder="Enter password" onChange={this.updateField}/>
+                  <input type="password" className="form-control" id="passwordInputLogin" placeholder="Enter password" onChange={this.updateField} value={this.state.password}/>
                 </div>
               </form>
-              <Button onClick={this.loginUser}>Login</Button>
-              <p className='registerLink' onClick={this.goToRegister}>Register a new account</p>
+              <div className='loginButtons'>
+                <Button onClick={this.loginUser} className='btn btn-info loginBut'>Login</Button>
+                <button className='registerLink' onClick={this.goToRegister}>Register a new account</button>
+              </div>
             </div>             
             : 
             <div>
               <form>
                 <div className="form-group">
+                  <label htmlFor="usernameInputLogin">Username</label>
+                  <input type="text" className="form-control" id="usernameInputLogin" placeholder="Enter username" onChange={this.updateField}  value={this.state.username}/>
+                </div>
+                <div className="form-group">
                   <label htmlFor="emailInputLogin">Email</label>
-                  <input type="email" className="form-control" id="emailInputLogin" placeholder="Enter email" onChange={this.updateField}/>
+                  <input type="email" className="form-control" id="emailInputLogin" placeholder="Enter email" onChange={this.updateField} value={this.state.email}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="passwordInputLogin">Password</label>
-                  <input type="password" className="form-control" id="passwordInputLogin" placeholder="Enter password" onChange={this.updateField}/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="usernameInputLogin">Username</label>
-                  <input type="text" className="form-control" id="usernameInputLogin" placeholder="Enter username" onChange={this.updateField}/>
+                  <input type="password" className="form-control" id="passwordInputLogin" placeholder="Enter password" onChange={this.updateField} value={this.state.password}/>
                 </div>
               </form>
               <Button onClick={this.registerUser}>Register</Button>
