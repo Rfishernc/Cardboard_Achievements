@@ -1,0 +1,22 @@
+.registerLink {
+  color: blue;
+  text-decoration: underline;
+  font-size: 0.9em;
+  background: transparent;
+  border: none;
+}
+
+.loginM {
+  background-color: rgba(109, 76, 28, 0.815);
+  color: white;
+}
+
+.loginButtons {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+}
+
+.loginBut {
+  width: 70px;
+}

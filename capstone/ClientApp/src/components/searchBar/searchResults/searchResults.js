@@ -43,12 +43,20 @@ class searchResults extends React.Component {
           }
     //Renders a match if each character in sequence matches their corresponding character. If a game name has already been rendered, will not create a copy.
           if (counter === splitWord.length && searchResultRender.length < 10
-            && !searchResultIds.includes(searchType + dbName.Id) && counter > 0) {
+            && !searchResultIds.includes(searchType + dbName.id) && counter > 0) {
 
-              searchResultIds.push(searchType + dbName.Id);
-              searchResultRender.push(<Link className={`${searchType}Item`} value={dbName.name} id={`${searchType}search${dbName.id}`}
-                onClick={this.selection} onMouseEnter={this.startCount} to={this.selection(dbName, searchType)}
-                key={`${searchType}search${dbName.id}`}>{this.iconBuilder(searchType)} {dbName.name}</Link>);
+              searchResultIds.push(searchType + dbName.id);
+              if (this.props.noPreview) {
+                searchResultRender.push(<div id={`${searchType}search${dbName.id}`} key={`${searchType}search${dbName.id}`} 
+                  className={`${searchType}Item`} onClick={this.props.selection} value={dbName.name}>
+                  {this.iconBuilder(searchType)} {dbName.name}
+                </div>);
+              } 
+              else {
+                searchResultRender.push(<Link className={`${searchType}Item`} value={dbName.name} id={`${searchType}search${dbName.id}`}
+                  onClick={this.selection} onMouseEnter={this.props.noPreview ? null : this.startCount} to={this.selection(dbName, searchType)}
+                  key={`${searchType}search${dbName.id}`}>{this.iconBuilder(searchType)} {dbName.name}</Link>);
+              }   
           }
     
         });
@@ -122,18 +130,34 @@ class searchResults extends React.Component {
     return 'searchListings';
   }
 
+  resultsCombiner = () => {
+    const games = this.props.games ? this.searchBuilder('game') : null;
+    const achievements = this.props.achievements ? this.searchBuilder('achievement') : null;
+    const users = this.props.users ? this.searchBuilder('user') : null;
+    if (games !== null) {
+      const renderArray = games.concat(achievements).concat(users);
+      return renderArray.slice(0, 10);
+    }
+    else if (achievements !== null) {
+      const renderArray = achievements.concat(users);
+      return renderArray.slice(0, 10);
+    }
+    else {
+      const renderArray = users.concat(games);
+      return renderArray.slice(0, 10);
+    }
+  }
+
   render() {
     return(
       <div className='searchResults'>
         {this.state.popOverInfo ? this.state.popOverInfo : null}
-        <Dropdown isOpen={true} toggle={this.toggle}>
+        <Dropdown isOpen={!this.props.closed}>
           <DropdownToggle caret className='dropdownBeGone'>
           </DropdownToggle>
-          <DropdownMenu className={this.classMaker()}>
-            {this.props.games ? this.searchBuilder('game') : null}
-            {this.props.achievements ? this.searchBuilder('achievement') : null}
-            {this.props.users ? this.searchBuilder('user') : null}
-          </DropdownMenu>
+          {!this.props.closed ? <DropdownMenu className={this.classMaker()}>
+            {this.resultsCombiner()}
+          </DropdownMenu> : null}
         </Dropdown>
       </div>
     );

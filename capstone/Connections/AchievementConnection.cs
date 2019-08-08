@@ -156,6 +156,22 @@ namespace capstone.Connections
             throw new Exception("Could not get achievements.");
         }
 
+        public IEnumerable<Achievement> GetRecentProposedAchievements()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Top(10) Achievement.Id as AchievementId, GameId, Achievement.DateSubmitted, Difficulty, Description,
+                                        Achievement.Image, Achievement.Name as AchievementName, Game.Name as GameName
+                                    From Achievement
+                                    Join Game on Game.Id = Achievement.GameId
+                                    Where VotingIsActive = 1 
+                                    Order by DateSubmitted Desc";
+                var achievements = connection.Query<Achievement>(queryString);
+                return achievements;
+            }
+            throw new Exception("Could not get achievements.");
+        }
+
         public IEnumerable<Achievement> GetProposedAchievementsForGame(ProposedAchievementsForGameRequest request)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -190,6 +206,21 @@ namespace capstone.Connections
             throw new Exception("Could not get achievement");
         }
 
+        public IEnumerable<Achievement> GetSearchedAchievements(string[] names)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select Achievement.Name as AchievementName, Game.Name as GameName, Achievement.DateAdded, Achievement.Description,
+                                        Achievement.Image, Achievement.Difficulty, Achievement.Id as AchievementId, Game.Id as GameId
+                                    From Achievement
+                                    Join Game on Game.Id = Achievement.GameId
+                                    Where Achievement.Name In @Names";
+                var achievements = connection.Query<Achievement>(queryString, new { names });
+                return achievements;
+            }
+            throw new Exception("Could not get users");
+        }
+
         public NewAchievement AddProposedAchievement(ProposedAchievementRequest proposedAchievementRequest)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -200,11 +231,12 @@ namespace capstone.Connections
                         Name = proposedAchievementRequest.Name,
                         Description = proposedAchievementRequest.Description,
                         Image = proposedAchievementRequest.Image,
-                        DateSubmitted = DateTime.Now
+                        DateSubmitted = DateTime.Now,
+                        Difficulty = proposedAchievementRequest.Difficulty
                     };
-                    var queryString = @"Insert into Achievement(GameId, Name, Description, Image, DateSubmitted, IsPending, IsApproved, VotingIsActive)
+                    var queryString = @"Insert into Achievement(GameId, Name, Description, Image, DateSubmitted, IsPending, IsApproved, VotingIsActive, Difficulty)
                                         Output inserted.*
-                                        Values(@GameId, @Name, @Description, @Image, @DateSubmitted, 1, 0, 1)";
+                                        Values(@GameId, @Name, @Description, @Image, @DateSubmitted, 1, 0, 1, @Difficulty)";
                     var achievement = connection.QueryFirstOrDefault<NewAchievement>(queryString, newAchievement);
                     return achievement;
             }
@@ -235,6 +267,8 @@ namespace capstone.Connections
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
+                var userGame = new GameConnection(_dbConfig).AddGameToUser(connection, userAchievementId);
+
                 var queryString = @"Update UserAchievement
                                         Set IsPending = 0,
                                             IsApproved = 1

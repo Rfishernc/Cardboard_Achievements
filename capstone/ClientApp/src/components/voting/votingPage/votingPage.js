@@ -6,12 +6,11 @@ import './votingPage.scss';
 class votingPage extends React.Component {
   state = {
     achievementInfo: null,
-    currentUser: 2,
   }
 
   componentDidMount() {
     const gameId = window.location.href.slice(window.location.href.search('=') + 1);
-    achievementData.getProposedAchievementsForGame(gameId, this.state.currentUser)
+    achievementData.getProposedAchievementsForGame(gameId, this.props.currentUser)
       .then((achievementInfo) => {
         this.setState({ achievementInfo });
       })
@@ -20,7 +19,7 @@ class votingPage extends React.Component {
   render() {
     return(
       <div className='votingPage'>
-        <Voting userId={this.state.currentUser} achievements={this.state.achievementInfo}/>
+        <Voting userId={this.props.currentUser} achievements={this.state.achievementInfo}/>
       </div>
     );
   }

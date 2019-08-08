@@ -73,6 +73,16 @@ const getRecentProposedAchievements = (userId) => new Promise((resolve, reject) 
     })
 });
 
+const getRecentProposedAchievementsNoUser = () => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/achievement/proposed&recent`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
 const getProposedAchievementsForGame = (gameId, userId) => new Promise((resolve, reject) => {
   axios.get(`${DBURL}/achievement/proposed/${gameId}/${userId}`)
     .then((data) => {
@@ -133,6 +143,16 @@ const getAchievementForSearchResult = (achievementId) => new Promise((resolve, r
     });
 });
 
+const getSearchedAchievements = (names) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/achievement/search/detail?${names}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
 export default {
   getUsersAchievementsForGame,
   getPopularity,
@@ -141,10 +161,12 @@ export default {
   submitAchievement,
   getRecentAchievements,
   getRecentProposedAchievements,
+  getRecentProposedAchievementsNoUser,
   getProposedAchievementsForGame,
   addProposedAchievement,
   getAchievementsToCheck,
   approveUserAchievement,
   declineUserAchievement,
   getAchievementForSearchResult,
+  getSearchedAchievements,
 }

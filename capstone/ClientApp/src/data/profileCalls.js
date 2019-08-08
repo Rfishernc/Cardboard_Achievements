@@ -4,7 +4,7 @@ import apiKeys from './apiKeys';
 const baseUrl = apiKeys.baseUrl
 
 const currentUserInfo = uid => new Promise ((resolve, reject) => {
-  axios.get(`${baseUrl}/user/${uid}`)
+  axios.get(`${baseUrl}/user/uid/${uid}`)
   .then(res => resolve(res))
   .catch(err => reject(err));
 });

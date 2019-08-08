@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using capstone.Connections;
+using capstone.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,6 +55,20 @@ namespace capstone.Controllers
             return Accepted(user);
         }
 
+        [HttpGet("search/detail")]
+        public ActionResult GetSearchedUsers([FromQuery(Name = "names")] string[] names)
+        {
+            var games = _connection.GetSearchedUsers(names);
+            return Accepted(games);
+        }
+
+        [HttpGet("uid/{uid}")]
+        public ActionResult GetUserInfo(string uid)
+        {
+            var userId = _connection.GetUserInfo(uid);
+            return Accepted(userId);
+        }
+
         [HttpPut("notified/{notificationId}")]
         public ActionResult ClearNotification(int notificationId)
         {
@@ -61,5 +76,18 @@ namespace capstone.Controllers
             return Accepted(notification);
         }
 
+        [HttpPost]
+        public ActionResult AddUserInDB(NewUserRequest request)
+        {
+            var user = _connection.AddUserInDB(request);
+            return Accepted(request);
+        }
+
+        [HttpPut("pic")]
+        public ActionResult ChangeImage(ChangeImageRequest request)
+        {
+            var imgUpdate = _connection.ChangeImage(request);
+            return Accepted(imgUpdate);
+        }
     }
 }

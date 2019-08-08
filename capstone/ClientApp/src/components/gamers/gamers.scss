@@ -1,15 +1,14 @@
-body {
-  background-image: url('../../images/cards.jpg');
-  background-size: cover;
-  background-attachment: fixed;
-}
+
+// .gamers {
+//   background-color: khaki;
+// }
 
 .gamersTitle {
   text-align: center;
   font-size: 1.5em;
   background-color: white;
-  border: 2px solid black;
-  border-radius: 15px;
+  // border: 2px solid black;
+  border-radius: 10px;
   width: 200px;
   margin-top: 2px;
 }
@@ -17,10 +16,31 @@ body {
 .gamerCardContainer {
   display: flex;
   flex-flow: row wrap;
+  justify-content: center;
+}
+
+.gamersContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 }
 
 .gamersBotContainer {
-  border-top: 1.5px solid black;
+  margin-top: 20px;
+  // background-color: khaki;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.seeMore {
+  background-color: transparent;
+  border: none;
+  color: white;
+  width: 100px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 2px;
 }
 
 .gamersSearch {
@@ -31,6 +51,7 @@ body {
   padding: 10px;
   margin-top: 10px;
   margin-left: 10px;
+  box-shadow: 0 2px 2px;
 }
 
 .gamersSearchTitle {
@@ -44,7 +65,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0.25em;
   margin-bottom: 20px;
-  background-color: gray;
+  background-color: rgba(109, 76, 28, 0.815);
 }
 
 .ranking {
@@ -62,4 +83,5 @@ body {
 .titleContainer {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 }

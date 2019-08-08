@@ -19,5 +19,6 @@ namespace capstone.Models
         public string AchievementImage { get; set; }
         public DateTime DateSubmitted { get; set; }
         public bool Completed { get; set; }
+        public int UserPoints { get; set; }
     }
 }

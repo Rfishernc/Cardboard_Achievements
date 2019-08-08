@@ -33,20 +33,24 @@ namespace capstone.Connections
                                         Set
                                             IsPending = 0,
                                             IsApproved = 1,
-                                            DateApproved = @DateApproved
-                                        Where Id IN @TopVoted
+                                            DateAdded = @DateApproved
+                                        Where Id In @TopVoted
 
                                         Update Achievement
-                                        Output updated.*
                                         Set
-                                            IsPending = 0
+                                            IsPending = 0,
                                             IsApproved = 0
+                                        Output inserted.*
                                         Where IsPending = 1 AND VotingIsActive = 0 AND Id NOT IN @TopVoted";
                     var achievements = connection.Query<Achievement>(queryString, new { dateApproved, topVoted });
 
                     UpdateMonthStatus(connection);
 
                     return achievements;
+                }
+                else
+                {
+                    return null;
                 }
             }
             throw new Exception("Failed to update achievements.");
@@ -68,24 +72,25 @@ namespace capstone.Connections
 
         public bool CurrentMonthIsUpdated(SqlConnection connection)
         {
-            var queryString = @"Select *
-                                    From UpdateAchievementStatus
+            var queryString = @"Select AchievementsUpdated
+                                    From UpdateAchievementsStatus
                                     Where [Month] = @Month AND AchievementsUpdated = 1";
-            var month = DateTime.Now.ToString("MM/yyyy");
+            var monthString = DateTime.Now.ToString("MM/yyyy");
+            var month = DateTime.Parse(monthString);
             var updateStatus = connection.QueryFirstOrDefault<int>(queryString, new { month });
             return updateStatus > 0;
         }
 
         public int UpdateMonthStatus(SqlConnection connection)
         {
-            var queryString = @"Update UpdateAchievementStatus                             
-                                    Set AchievementStatus = 1
-                                Output inserted.*
+            var queryString = @"Update UpdateAchievementsStatus                             
+                                    Set AchievementsUpdated = 1
                                 Where [Month] = @Month
                                 
                                 Insert into UpdateAchievementStatus([Month], AchievementsUpdated)
                                 Values( DateAdd(month, 1, @Month), 0)";
-            var month = DateTime.Now.ToString("MM/yyyy");
+            var monthString = DateTime.Now.ToString("MM/yyyy");
+            var month = DateTime.Parse(monthString);
             var updateStatus = connection.QueryFirstOrDefault<int>(queryString, new { month });
             return updateStatus;
         }

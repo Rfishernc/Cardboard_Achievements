@@ -35,6 +35,13 @@ namespace capstone.Controllers
             return Accepted(gameAchievements);
         }
 
+        [HttpGet("{gameId}")]
+        public ActionResult GetGameDetailsNoUser(int gameId)
+        {
+            var gameAchievements = _connection.GetGameDetailsNoUser(gameId);
+            return Accepted(gameAchievements);
+        }
+
         [HttpGet("{gameId}/players")]
         public ActionResult GetNumberOfPlayers(int gameId)
         {
@@ -61,6 +68,13 @@ namespace capstone.Controllers
         {
             var game = _connection.GetGameForSearchResult(gameId);
             return Accepted(game);
+        }
+
+        [HttpGet("search/detail")]
+        public ActionResult GetSearchedGames([FromQuery(Name = "names")] string[] names)
+        {
+            var games = _connection.GetSearchedGames(names);
+            return Accepted(games);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using System.Threading;
 
 namespace capstone.Connections
 {
@@ -31,9 +32,49 @@ namespace capstone.Connections
                 var games = connection.Query<GameAchievement>(queryString, new { userId });
                 var groupedAchievements = games.GroupBy(achievement => achievement.GameId);
                 var gamesWithAchieves = groupedAchievements.ToDictionary(x => x.Key, x => x.ToList());
+
+                var totals = GetUsersCompletions(connection, userId);
+                
+                foreach(KeyValuePair<int, List<GameAchievement>> gameGroup in gamesWithAchieves)
+                {
+                    foreach(Completions totalPoints in totals)
+                    {
+                        if (totalPoints.GameId == gameGroup.Key)
+                        {
+                            gameGroup.Value[0].UserPoints = totalPoints.UserPoints;
+                        }
+                    }
+                }
+
                 return gamesWithAchieves;
             }
             throw new Exception("Failed to return games list.");
+        }
+
+        public List<Completions> GetUsersCompletions (SqlConnection connection, int userId)
+        {
+            var queryString = @"Select Achievement.GameId, Achievement.Difficulty
+                                From UserAchievement
+                                Join Achievement on Achievement.Id = UserAchievement.AchievementId
+                                Where UserAchievement.UserId = @UserId AND UserAchievement.IsApproved = 1";
+            var completions = connection.Query<Completions>(queryString, new { userId });
+            foreach (Completions completion in completions)
+            {
+                completion.UserPoints = completion.Difficulty * 10;
+            }
+            var groupedCompletions = completions.GroupBy(x => x.GameId);
+            var totals = new List<Completions>();
+            foreach (IGrouping<int, Completions> gameGroup in groupedCompletions)
+            {
+                var gameId = gameGroup.Key;
+                var userPoints = 0;
+                foreach (Completions completion in gameGroup)
+                {
+                    userPoints += completion.UserPoints;
+                }
+                totals.Add(new Completions() { GameId = gameId, UserPoints = userPoints });
+            }
+            return totals;
         }
 
         public List<UserWithAchievements> GetGamers()
@@ -82,9 +123,9 @@ namespace capstone.Connections
                 var queryString = @"Select Top(1) [User].Username, [User].ProfilePic, [User].Points, Achievement.Image, Achievement.Name as AchievementName,
                                         Achievement.Description, Achievement.DateAdded, Achievement.Difficulty, Game.Id as GameId, Game.Name as GameName
                                     From [User]
-                                    Join UserAchievement on UserAchievement.UserId = [User].Id
-                                    Join Achievement on Achievement.Id = UserAchievement.AchievementId
-                                    Join Game on Game.Id = Achievement.GameId
+                                    Left Join UserAchievement on UserAchievement.UserId = [User].Id AND UserAchievement.IsApproved = 1
+                                    Left Join Achievement on Achievement.Id = UserAchievement.AchievementId
+                                    Left Join Game on Game.Id = Achievement.GameId
                                     Where [User].Id = @UserId
                                     Order by UserAchievement.DateSubmitted Desc";
                 var user = connection.QueryFirstOrDefault<UserOverview>(queryString, new { userId });
@@ -117,6 +158,19 @@ namespace capstone.Connections
                 return returnUser;
             }
             throw new Exception("Could not get user");
+        }
+
+        public IEnumerable<User> GetSearchedUsers(string[] names)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Select *
+                                    From [User]
+                                    Where [User].Username In @Names";
+                var users = connection.Query<User>(queryString, new { names });
+                return users;
+            }
+            throw new Exception("Could not get users");
         }
 
         public User UpdateUserPoints(SqlConnection connection, int userId, int points)
@@ -168,6 +222,61 @@ namespace capstone.Connections
                 }   
             }
             throw new Exception("Could not clear notification");
+        }
+
+        public UserInfo GetUserInfo(string uid)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var queryString = @"Select Id, IsModerator
+                                    From [User]
+                                    Where [User].Uid = @Uid";
+                    var user = connection.QueryFirstOrDefault<UserInfo>(queryString, new { uid });
+                    if (user == null)
+                    {
+                        Thread.Sleep(200);
+                    }
+                    if (user != null)
+                    {
+                        return user;
+                    }
+                }
+            }
+            throw new Exception("Could not get user Id");
+        }
+
+        public User AddUserInDB(NewUserRequest request)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                request.JoinDate = DateTime.Now;
+                request.ProfilePic = "https://firebasestorage.googleapis.com/v0/b/cardboard-achievements.appspot.com/o/generic.png?alt=media&token=10f987dd-6368-47ed-be15-d31bd6ad040a";
+                var queryString = @"Insert into [User](Username, Uid, JoinDate, Points, IsModerator, IsCertified, ProfilePic)
+                                    Output inserted.*
+                                    Values(@Username, @Uid, @JoinDate, 0, 0, 0, @ProfilePic)";
+                var user = connection.QueryFirstOrDefault<User>(queryString, request);
+                if (user != null)
+                {
+                    return user;
+                }
+            }
+            throw new Exception("Could not add user");
+        }
+
+        public int ChangeImage(ChangeImageRequest request)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                var queryString = @"Update [User]
+                                        Set ProfilePic = @ProfilePic
+                                    Output inserted.Id
+                                    Where [User].Id = @Id";
+                var imgUpdate = connection.QueryFirst<int>(queryString, request);
+                return imgUpdate;
+            }
+            throw new Exception("Could not change image");
         }
     }
 }

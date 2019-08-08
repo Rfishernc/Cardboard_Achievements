@@ -76,15 +76,25 @@ class proposeAchievement extends React.Component {
 
   proposeAchieve = (event) => {
     event.preventDefault();
+    const convertDifficulty = (tar) => {
+      switch(tar) {
+        case 'easy' : return 1;
+        case 'normal' : return 2;
+        case 'hard' : return 3;
+        default: break;
+      }
+    }
+
     const newAchievement = {
       name: this.state.name,
-      gameId: this.state.game,
-      difficulty: this.state.difficulty,
+      gameId: parseInt(this.state.game.gameId, 10),
+      difficulty: convertDifficulty(this.state.difficulty),
       description: this.state.description,
       image: this.state.image
     }
     achievementData.addProposedAchievement(newAchievement)
       .then(() => {
+        this.props.refresh();
         this.toggle();
       });
   }
@@ -110,6 +120,10 @@ class proposeAchievement extends React.Component {
               <div className="form-group">
                 <label htmlFor="descriptionInput">Description</label>
                 <input type="text" className="form-control" id="descriptionInput" placeholder="Enter achievement description" onChange={this.select}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="imageInput">Image Link</label>
+                <input type="text" className="form-control" id="imageInput" placeholder="Enter icon link" onChange={this.select}/>
               </div>
               <div className='difficultyContainer'>
                 <p className='difficultyTitle'>Difficulty: </p>

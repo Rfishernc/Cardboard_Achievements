@@ -53,10 +53,32 @@ const getUserForSearchResult = (userId) => new Promise((resolve, reject) => {
     });
 });
 
+const getSearchedUsers = (names) => new Promise((resolve, reject) => {
+  axios.get(`${DBURL}/user/search/detail?${names}`)
+    .then((data) => {
+      resolve(data.data);
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
+const changeImage = (userId, image) => new Promise((resolve, reject) => {
+  axios.put(`${DBURL}/user/pic`, { id: userId, profilePic: image })
+    .then(() => {
+      resolve();
+    })
+    .catch((err) => {
+      reject(err);
+    })
+});
+
 export default {
   getGamers,
   getUserOverview,
   getNotifications,
   clearNotification,
   getUserForSearchResult,
+  getSearchedUsers,
+  changeImage,
 }

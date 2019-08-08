@@ -19,13 +19,19 @@
   padding: 3px;
 }
 
-.homelow {
-  background-image: url('../../images/board.jpg');
-  background-size: cover;
-  background-attachment: fixed;
-}
+// .homelow {
+//   background-image: url('../../images/board.jpg');
+//   background-size: cover;
+//   background-attachment: fixed;
+// }
 
 .blogCol {
-  background-color: rgba(255,255,255, 0.25);
-  margin-top: 10px;
+color: white;
+}
+
+.home {
+  .achievement {
+    width: auto;
+  }
+  color: white;
 }

@@ -3,30 +3,27 @@ import achievementData from '../../data/achievementData';
 import gameData from '../../data/gameData';
 import Achievement from '../achievement/achievement';
 import SubmitAchievement from '../submitAchievement/submitAchievement';
+import { Progress } from 'reactstrap';
 import './myAchievements.scss';
 
 class myAchievements extends React.Component {
   state = {
-    userId: window.location.href.slice(window.location.href.search('=') + 1),
     achievementsInfo: null,
     gamesInfo: null,
-    isUser: true
+    isUser: true,
   }
 
   componentDidMount() {
-    achievementData.getUsersAchievements(this.state.userId)
-      .then((achievementsInfo) => {
-        this.setState({ achievementsInfo });
-      });
-    gameData.getUsersGames(this.state.userId)
-      .then((gamesInfo) => {
-        this.setState({ gamesInfo });
-      });
+    this.checkUserState();
+  }
+
+  componentDidUpdate() {
+    this.checkUserState();
   }
 
   recentAchievementsBuilder = () => {
+    let renderArray = [];
     if (this.state.achievementsInfo !== null) {
-      let renderArray = [];
       
       Object.keys(this.state.achievementsInfo).forEach((game) => {
         this.state.achievementsInfo[game].forEach((achievement) => {
@@ -47,13 +44,13 @@ class myAchievements extends React.Component {
       if (renderArray.length > 5) {
         renderArray = renderArray.slice(0, 5);
       }
-      return renderArray;
     }
+    return renderArray;
   }
 
   gamesCardBuilder = () => {
+    let renderArray = [];
     if (this.state.gamesInfo !== null) {
-      let renderArray = [];
       Object.keys(this.state.gamesInfo).forEach((gameId) => {
         const game = this.state.gamesInfo[gameId];
         let points = 0;
@@ -68,11 +65,12 @@ class myAchievements extends React.Component {
           <h5 className="card-title">{game[0].gameName}</h5>
           <p className="card-text">{game.length} Achievements</p>
           <p className="card-text">{points} Total Points</p>
+          <Progress value={(game[0].userPoints / points) * 100} color='warning'>{((game[0].userPoints / points) * 100).toFixed(1)}%</Progress>
         </div>
       </div>)
       });
-      return renderArray;
     }
+    return renderArray;
   }
 
   historyPusher = (event) => {
@@ -97,10 +95,34 @@ class myAchievements extends React.Component {
     }
   }
 
+  checkUserState = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          gameData.getUsersGames(this.props.currentUser)
+          .then((gamesInfo) => {
+            achievementData.getUsersAchievements(this.props.currentUser)
+            .then((achievementsInfo) => {
+              this.setState({ achievementsInfo, gamesInfo });
+            });
+          });
+        });
+      }
+    }
+    else {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
+    }
+  }
+
   render() {
     return(
       <div className='myAchievements'>
-        <div className="container-fluid">
+        <div className="container-fluid fluidachieve">
           <div className="row achievementsUpper">
             <div className="col-9 recentAchievements">
               <div className='titleContainer'>
@@ -111,7 +133,7 @@ class myAchievements extends React.Component {
               </div>
             </div>
             {this.state.isUser ? <div className="col-3 submitAchievementContainer">
-              <SubmitAchievement userId={this.state.userId}/>
+              <SubmitAchievement currentUser={this.props.currentUser}/>
             </div> : null}
           </div>
           <div className='myAchievementsLower'>

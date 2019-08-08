@@ -14,7 +14,6 @@ class home extends React.Component {
     achievementsInfo: null,
     userInfo: null,
     votingInfo : null,
-    currentUser: 2
   }
 
   componentDidMount() {
@@ -22,20 +21,13 @@ class home extends React.Component {
       .then((blogInfo) => {
         this.setState({ blogInfo });
       });
-    achievementData.getRecentAchievements(this.state.currentUser)
-      .then((achievementsInfo) => {
-        this.setState({ achievementsInfo });
-      });
-    if (this.state.currentUser !== null) {
-      userData.getUserOverview(this.state.currentUser)
-      .then((userInfo) => {
-        this.setState({ userInfo });
-      });
-      achievementData.getRecentProposedAchievements(this.state.currentUser)
-        .then((votingInfo) => {
-          this.setState({ votingInfo });
-        });
+    if (this.props.currentUser !== null && this.props.currentUser !== undefined) {
+      
     }  
+  }
+
+  componentDidUpdate() {
+    this.checkUserState();
   }
 
   blogBuilder = () => {
@@ -50,16 +42,29 @@ class home extends React.Component {
   }
 
   achievementsBuilder = () => {
-    const renderArray = [];
     if (this.state.achievementsInfo !== null) {
+      const renderArray = [];
       this.state.achievementsInfo.forEach((achievement) => {
         renderArray.push(<Achievement name={achievement.achievementName} image={achievement.image} description={achievement.description} 
           difficulty={achievement.difficulty} dateAdded={achievement.dateAdded} gameName={achievement.gameName} gameId={achievement.gameId}
           historyPusher={this.achievementHistoryPusher} hovered={this.hovered} hoveredOut={this.hoveredOut}
-          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.state.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
+          key={`achievement${achievement.achievementId}`} voteStatus='approved' completed={this.props.currentUser ? (achievement.completed ? <i className="fas fa-trophy completed"></i> : <i className="fas fa-trophy fail"></i>) : null}/>);
       });
-    }
     return renderArray;
+    }
+  }
+
+  votingBuilder = () => {
+    if (this.state.currentUser) {
+      if (this.state.votingInfo !== null) {
+        return <Voting achievements={this.state.votingInfo} userId={this.state.currentUser} refresh={this.refresh}/>;
+      }
+    }
+    else {
+      if (this.state.votingInfo !== null) {
+        return <Voting achievements={this.state.votingInfo} refresh={this.refresh}/>;
+      }
+    }
   }
   
   achievementHistoryPusher = (event) => {
@@ -84,14 +89,66 @@ class home extends React.Component {
     }
   }
 
+  checkUserState = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          userData.getUserOverview(this.state.currentUser)
+          .then((userInfo) => {
+            achievementData.getRecentProposedAchievements(this.state.currentUser)
+              .then((votingInfo) => {
+                achievementData.getRecentAchievements(this.state.currentUser) 
+                .then((achievementsInfo) => {
+                  this.setState({ userInfo, achievementsInfo, votingInfo });
+                })
+              });
+          });
+        });
+      }
+    }
+    else 
+    {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
+      achievementData.getRecentProposedAchievementsNoUser()
+        .then((votingInfo) => {
+          achievementData.getRecentAchievements(0)
+            .then((achievementsInfo) => {
+              if (JSON.stringify(this.state.votingInfo) !== JSON.stringify(votingInfo) || JSON.stringify(this.state.achievementsInfo) !== JSON.stringify(achievementsInfo)) {
+                this.setState({ votingInfo, achievementsInfo });
+              }
+            });
+        });
+    }
+  }
+
+  refresh = () => {
+    achievementData.getRecentProposedAchievements(this.state.currentUser)
+      .then((votingInfo) => {
+        this.setState({ votingInfo });
+      });
+  }
+
+  refreshPic = () => {
+    userData.getUserOverview(this.state.currentUser)
+      .then((userInfo) => {
+        this.setState({ userInfo });
+      });
+  }
+
   render() {
     return(
       <div className='home'>
-        {this.state.userInfo ? <UserOverview info={this.state.userInfo}/> : null}
+        {this.state.userInfo && this.state.currentUser ? <UserOverview info={this.state.userInfo}
+          currentUser={this.props.currentUser} refreshPic={this.refreshPic}/> : null}
         <div className='container-fluid'>
           <div className='row homelow'>
             <div className='col-3'>
-              <Voting achievements={this.state.votingInfo} userId={this.state.currentUser}/>
+              {this.votingBuilder()}
             </div>
             <div className='col-5 blogCol'>
               {this.blogBuilder()}

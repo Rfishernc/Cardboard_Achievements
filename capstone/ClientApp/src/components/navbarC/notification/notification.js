@@ -39,7 +39,7 @@ class notification extends React.Component {
             {notification.isApproved ? `Your ${notification.achievementName} achievement was approved` : 
               `Your ${notification.achievementName} achievement was declined`}
           </PopoverHeader>
-          <p>Reason for Decline: {notification.declineMsg}</p>
+          <p className='notificationMsg'>Reason for Decline: {notification.declineMsg}</p>
           <div className='notificationAchievement'>
             <div className='achievementImgContainer'>
              <p>{notification.achievementName}</p>

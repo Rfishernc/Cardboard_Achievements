@@ -14,8 +14,8 @@ class gamer extends React.Component {
               {this.props.isMonthly ? 
               <div className="card-body gamerCardBody">
                 <h5 className="card-title gamerCardTitle">{this.props.info.username}</h5>
-                <p className="card-text">{this.props.info.monthlyAchievements} Achievements this month</p>
-                <p className="card-text">{this.props.info.monthlyPoints} Points this month</p>
+                <p className="card-text gamerText">{this.props.info.monthlyAchievements} Achievements this month</p>
+                <p className="card-text gamerText">{this.props.info.monthlyPoints} Points this month</p>
                 <p className="card-text"><small className="text-muted">{this.props.info.totalAchievements} Total Achievements  {this.props.info.points} Total Points</small></p>
               </div>
               :
