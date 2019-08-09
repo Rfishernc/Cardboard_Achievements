@@ -21,3 +21,7 @@ To build this project locally you will need to follow the following steps:
 7.  Copy the port you will be serving from locally into the baseURL portion of the apiKeys file.
 
 8.  Build the project in Visual Studio and open a browser to localhost on your served port.
+
+## Screenshots
+
+![home](capstone/cardboardhome.PNG)

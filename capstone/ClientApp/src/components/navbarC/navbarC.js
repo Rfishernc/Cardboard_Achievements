@@ -25,13 +25,8 @@ class navbarC extends React.Component {
     popoverOpen: false
   }
 
-  componentDidMount() {
-    if (this.props.currentUser) {
-      userData.getNotifications(this.props.currentUser)
-        .then((notificationsInfo) => {
-          this.setState({ notificationsInfo });
-        })
-    }
+  componentDidUpdate() {
+    this.checkUserStatus();
   }
 
   refresh = () => {
@@ -109,6 +104,28 @@ class navbarC extends React.Component {
               {this.props.currentUser ? <NavLink tag={RRNavLink} to={`/games+${this.props.currentUser}`} onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='myGamesLink'>My Games</NavLink> : null}
               <NavLink tag={RRNavLink} to='/games+all' onMouseEnter={this.gameMenuHovered} onMouseLeave={this.gameMenuHoveredOut} className='gameMenuItem' id='allGamesLink'>All Games</NavLink>
             </div>;
+  }
+
+  checkUserStatus = () => {
+    if (this.props.currentUser) {
+      if (this.state.currentUser) {
+        return;
+      }
+      else {
+        this.setState({ currentUser: this.props.currentUser }, () => {
+          userData.getNotifications(this.state.currentUser)
+          .then((notificationsInfo) => {
+            this.setState({ notificationsInfo });
+        });
+      });
+    }
+  }
+    else 
+    {
+      if (this.state.currentUser) {
+        this.setState({ currentUser: null });
+      }
+    }
   }
 
   render() {

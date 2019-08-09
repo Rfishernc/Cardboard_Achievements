@@ -113,14 +113,14 @@ namespace capstone.Controllers
             return Accepted(achievement);
         }
 
-        [HttpPut("approve/${userId}")]
+        [HttpPut("approve/{userAchievementId}")]
         public ActionResult ApproveUserAchievement(int userAchievementId)
         {
             var userAchievement = _connection.ApproveUserAchievement(userAchievementId);
             return Accepted(userAchievement);
         }
 
-        [HttpPut("decline/${userId}")]
+        [HttpPut("decline/{userId}")]
         public ActionResult DeclineUserAchievement(DeclineRequest request)
         {
             var userAchievement = _connection.DeclineUserAchievement(request);

@@ -271,7 +271,7 @@ namespace capstone.Connections
 
                 var queryString = @"Update UserAchievement
                                         Set IsPending = 0,
-                                            IsApproved = 1
+                                            IsApproved = 1,
                                             NotificationPending = 1
                                     Output inserted.*
                                     Where UserAchievement.Id = @UserAchievementId";
@@ -292,8 +292,8 @@ namespace capstone.Connections
             {
                 var queryString = @"Update UserAchievement
                                         Set IsPending = 0,
-                                            IsApproved = 0
-                                            DeclineMsg = @DeclineMsg
+                                            IsApproved = 0,
+                                            DeclineMsg = @DeclineMsg,
                                             NotificationPending = 1
                                     Output inserted.*
                                     Where UserAchievement.Id = @UserAchievementId";
@@ -311,7 +311,7 @@ namespace capstone.Connections
             var queryString = @"Select Difficulty
                                 From Achievement
                                 Where Achievement.Id = @AchievementId";
-            var points = connection.QueryFirstOrDefault<int>(queryString) * 10;
+            var points = connection.QueryFirstOrDefault<int>(queryString, new { achievementId }) * 10;
             return points;
         }
     }
