@@ -18,40 +18,37 @@ class notification extends React.Component {
     this.props.notificationsInfo.forEach((notification) => {
       renderArray.push(<div key={`notification${notification.id}`}>{notification.isApproved ?
         <div>
-          <PopoverHeader>
+          <PopoverHeader className='notificationHeader'>
             {notification.isApproved ? `Your ${notification.achievementName} achievement was approved` : 
               `Your ${notification.achievementName} achievement was declined`}
           </PopoverHeader>
-          <p className='notificationUnit'>Congragulations your submission for {notification.achievementName} was approved.</p>
           <div>
-            <div>
-             <p>{notification.achievementName}</p>
-              <img src={notification.image} alt=''/>
+          <p className='notiGame'>{notification.gameName}</p>
+            <div className='notiContainer'>
+              <img src={notification.image} alt='' className='notificationImg'/>
+              <p>{notification.description}</p> 
             </div>
-            <p>{notification.gameName}</p>
-            <p>{notification.description}</p>  
+             
           </div>
           <Button className='btn btn-sm btn-dark' id={`notification${notification.id}`} onClick={this.notified}>Ok</Button>
         </div>
         :
         <div key={`notification${notification.id}`}>
-          <PopoverHeader>
+          <PopoverHeader className='notificationHeader'>
             {notification.isApproved ? `Your ${notification.achievementName} achievement was approved` : 
               `Your ${notification.achievementName} achievement was declined`}
           </PopoverHeader>
+          <div>
           <p className='notificationMsg'>Reason for Decline: {notification.declineMsg}</p>
-          <div className='notificationAchievement'>
-            <div className='achievementImgContainer'>
-             <p>{notification.achievementName}</p>
-              <img src={notification.image} alt='' className='achievementImg'/>
+          <p className='notiGame'>{notification.gameName}</p>
+            <div className='notiContainer'>
+              <img src={notification.image} alt='' className='notificationImg'/>
+              <p>{notification.description}</p> 
             </div>
-            <div className='notificationInfoContainer'>
-              <p>{notification.gameName}</p>
-              <p>{notification.description}</p>  
-            </div>
+             
           </div>
           <Button className='btn btn-sm btn-dark' id={`notification${notification.id}`} onClick={this.notified}>Ok</Button>
-      </div>}</div>);
+          </div>}</div>);
     });
   }
     return renderArray;
@@ -61,7 +58,7 @@ class notification extends React.Component {
     return(
       <div className='notification'>
           <Popover placement="bottom" toggle={this.props.toggle} isOpen={this.props.popoverOpen} target="notificationsButton">
-            <PopoverBody>
+            <PopoverBody className='notificationBody'>
               {this.notificationsBuilder()}
             </PopoverBody>
           </Popover>

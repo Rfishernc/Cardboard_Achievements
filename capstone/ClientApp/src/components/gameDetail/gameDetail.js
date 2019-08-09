@@ -108,7 +108,6 @@ class gameDetail extends React.Component {
           const whichUser = () => {
             return this.state.selectedUser && this.state.selectedUser === this.state.currentUser ? this.state.selectedUser : this.state.currentUser;
           }
-          console.log(whichUser());
           gameData.getGameDetails(this.state.gameId, whichUser())
           .then((gameInfo) => {
             achievementData.getUsersAchievementsForGame(whichUser(), this.state.gameId)

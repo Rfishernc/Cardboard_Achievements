@@ -175,11 +175,11 @@ namespace capstone.Connections
 
         public User UpdateUserPoints(SqlConnection connection, int userId, int points)
         {
-            var queryString = @"Update User
+            var queryString = @"Update [User]
                                     Set Points = Points + @Points
                                 Output inserted.*
                                 Where Id = @UserId";
-            var user = connection.QueryFirstOrDefault<User>(queryString);
+            var user = connection.QueryFirstOrDefault<User>(queryString, new { userId, points });
             if (user != null)
             {
                 return user;
